@@ -10,14 +10,14 @@ compatibility_flags = ["nodejs_compat"]
 [[d1_databases]]
 binding = "DB"
 database_name = "amsi_spaces"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "2d4f6b39-55f9-49ef-8bdd-7cd5a8b24680"
 
 # --- KV namespace: caches the Palmera catalogue (synced daily/on demand via
 # /api/palmera-sync) so /properties reads are fast and don't hit Palmera's
 # rate limits on every visitor. ---
 [[kv_namespaces]]
 binding = "PALMERA_CACHE"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
+id = "8e9871b9eb7d4ba5827d793e48e61d56"
 
 # --- Non-secret environment variables ---
 [vars]
