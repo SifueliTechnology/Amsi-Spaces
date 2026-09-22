@@ -1,0 +1,44 @@
+---
+// Shared template for /disclosure, /privacy, /terms — sticky TOC, "In short"
+// summary callout, reading-optimized typography, print-friendly.
+import BaseLayout from './BaseLayout.astro';
+
+interface Section {
+  id: string;
+  heading: string;
+}
+interface Props {
+  title: string;
+  inShort: string;
+  sections: Section[];
+  lastUpdated: string;
+}
+const { title, inShort, sections, lastUpdated } = Astro.props;
+---
+<BaseLayout title={title}>
+  <div class="container-page py-12 print:py-0">
+    <header class="max-w-3xl">
+      <h1 class="text-3xl font-semibold text-ink-900 sm:text-4xl">{title}</h1>
+      <p class="mt-2 text-sm text-ink-500">Last updated {lastUpdated}</p>
+    </header>
+
+    <div class="mt-6 max-w-3xl rounded-2xl border border-referral/30 bg-referral-bg px-5 py-4 print:border-ink-900/20 print:bg-transparent">
+      <p class="text-sm font-semibold text-referral">In short</p>
+      <p class="mt-1 text-sm text-ink-700">{inShort}</p>
+    </div>
+
+    <div class="mt-10 grid gap-10 lg:grid-cols-[220px_1fr]">
+      <nav class="hidden lg:sticky lg:top-24 lg:block lg:self-start print:hidden" aria-label="Table of contents">
+        <p class="text-xs font-semibold uppercase tracking-wide text-ink-500">On this page</p>
+        <ul class="mt-3 space-y-2 text-sm">
+          {sections.map((s) => (
+            <li><a href={`#${s.id}`} class="text-ink-700 hover:text-amsi">{s.heading}</a></li>
+          ))}
+        </ul>
+      </nav>
+      <article class="prose prose-sand max-w-none prose-headings:font-serif prose-a:text-amsi">
+        <slot />
+      </article>
+    </div>
+  </div>
+</BaseLayout>

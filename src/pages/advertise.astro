@@ -1,0 +1,25 @@
+---
+export const prerender = true; // static content only, no Cloudflare bindings needed
+
+// Not yet drafted in Claude Design per brief Section 9 — this is a
+// reasonable placeholder consistent with the rest of the site's compliance
+// rules (referral/sponsored labelling, no yield claims), ready to replace
+// once the design exists.
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import EnquiryFooter from '@/components/EnquiryFooter.astro';
+---
+<BaseLayout title="Advertise" description="Advertise with Amsi Spaces.">
+  <div class="container-page py-16">
+    <h1 class="text-3xl font-semibold text-ink-900 sm:text-4xl">Advertise with Amsi Spaces</h1>
+    <p class="mt-4 max-w-2xl text-ink-700">
+      We work with a small number of tools, course and e-guide partners across the Resources
+      section, always disclosed as "Sponsored." We do not run display advertising on Properties
+      or Financing pages.
+    </p>
+    <p class="mt-4 max-w-2xl text-ink-700">
+      If you'd like to talk about a partnership, tell us about your product below and Michael
+      will reply personally.
+    </p>
+  </div>
+  <EnquiryFooter interestChips={['Advertise with us']} context="Advertising enquiry" />
+</BaseLayout>

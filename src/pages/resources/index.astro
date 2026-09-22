@@ -1,0 +1,207 @@
+---
+export const prerender = true; // static content only, no Cloudflare bindings needed
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import DisclosureBanner from '@/components/DisclosureBanner.astro';
+import LabelPill from '@/components/LabelPill.astro';
+import EnquiryFooter from '@/components/EnquiryFooter.astro';
+import { markets } from '@/data/markets';
+import { eguides } from '@/data/eguides';
+
+const tabs = [
+  { id: 'tools', label: 'Tools' },
+  { id: 'courses', label: 'Courses' },
+  { id: 'financing', label: 'Financing' },
+  { id: 'eguides', label: 'E-guides' },
+];
+const requestedTab = Astro.url.searchParams.get('tab');
+const activeTab = tabs.some((t) => t.id === requestedTab) ? requestedTab! : 'tools';
+
+// Placeholder tools/courses — swap for real affiliate partners once signed.
+const tools = [
+  { name: 'Mortgage Repayment Calculator', blurb: 'Estimate monthly repayments across currencies.', href: '/go/tool-calculator-partner' },
+  { name: 'Currency Converter Widget', blurb: 'Live rates for AED, EUR, OMR, SAR, USD.', href: '/go/tool-fx-partner' },
+];
+const courses = [
+  { name: 'Off-Plan Investing 101', blurb: 'A partner-run video course for first-time buyers.', href: '/go/course-offplan-101' },
+  { name: 'Understanding Payment Plans', blurb: 'A short course on schedule vs ratio payment plans.', href: '/go/course-payment-plans' },
+];
+---
+<BaseLayout title="Resources" description="Tools, courses, financing and e-guides for off-plan property buyers.">
+  <div class="container-page py-10">
+    <h1 class="text-3xl font-semibold text-ink-900 sm:text-4xl">Resources</h1>
+    <div class="mt-4"><DisclosureBanner /></div>
+
+    <div class="mt-8 flex flex-wrap gap-2 border-b border-sand-200 pb-px" role="tablist">
+      {tabs.map((t) => (
+        <button class="resource-tab rounded-t-lg border-b-2 px-4 py-2 text-sm font-medium" data-tab={t.id} aria-selected={t.id === activeTab ? 'true' : 'false'}>
+          {t.label}
+        </button>
+      ))}
+    </div>
+
+    <!-- Tools -->
+    <div class="resource-panel mt-8 grid gap-6 sm:grid-cols-2" data-tab="tools" hidden={activeTab !== 'tools'}>
+      {tools.map((t) => (
+        <div class="rounded-2xl border border-sand-200 bg-white p-6">
+          <div class="flex items-start justify-between gap-3">
+            <h3 class="font-serif text-lg font-semibold text-ink-900">{t.name}</h3>
+            <LabelPill label="sponsored" />
+          </div>
+          <p class="mt-2 text-sm text-ink-700">{t.blurb}</p>
+          <a href={t.href} class="mt-4 inline-block text-sm font-medium text-amsi hover:underline">Try it &rarr;</a>
+        </div>
+      ))}
+      <div class="rounded-2xl border border-dashed border-sand-300 p-6 text-sm text-ink-500 sm:col-span-2">
+        Ad slot (Tools tab — one allowed per brief Section 4).
+      </div>
+    </div>
+
+    <!-- Courses -->
+    <div class="resource-panel mt-8 grid gap-6 sm:grid-cols-2" data-tab="courses" hidden={activeTab !== 'courses'}>
+      {courses.map((c) => (
+        <div class="rounded-2xl border border-sand-200 bg-white p-6">
+          <div class="flex items-start justify-between gap-3">
+            <h3 class="font-serif text-lg font-semibold text-ink-900">{c.name}</h3>
+            <LabelPill label="sponsored" />
+          </div>
+          <p class="mt-2 text-sm text-ink-700">{c.blurb}</p>
+          <a href={c.href} class="mt-4 inline-block text-sm font-medium text-amsi hover:underline">View course &rarr;</a>
+        </div>
+      ))}
+      <div class="rounded-2xl border border-dashed border-sand-300 p-6 text-sm text-ink-500 sm:col-span-2">
+        Ad slot (Courses tab — one allowed per brief Section 4).
+      </div>
+    </div>
+
+    <!-- Financing -->
+    <div class="resource-panel mt-8" data-tab="financing" hidden={activeTab !== 'financing'}>
+      <div class="flex items-center gap-3">
+        <h2 class="text-xl font-semibold text-ink-900">Financing</h2>
+        <LabelPill label="referral-partner" />
+      </div>
+      <p class="mt-2 max-w-2xl text-sm text-ink-700">
+        No financing partner is signed yet. Once one is, it appears here labelled
+        "Referral partner" — never "Sponsored" — matching how Palmera is labelled on Properties.
+      </p>
+
+      <div class="mt-6 grid gap-6 lg:grid-cols-2">
+        <div class="rounded-2xl border border-sand-200 bg-white p-6">
+          <label class="text-sm font-medium text-ink-900" for="financing-market">Market</label>
+          <select id="financing-market" class="mt-2 w-full rounded-lg border border-ink-900/15 px-3 py-2 text-sm">
+            {markets.map((m) => <option value={m.slug}>{m.name}</option>)}
+          </select>
+          <p class="mt-4 text-sm font-medium text-ink-900">Which loan fits you?</p>
+          <div class="mt-2 flex flex-wrap gap-2">
+            {['Cash buyer', 'Local mortgage', 'Developer payment plan only', 'Not sure yet'].map((opt) => (
+              <label class="cursor-pointer">
+                <input type="radio" name="loan-fit" class="peer sr-only" />
+                <span class="inline-block rounded-full border border-ink-900/15 px-3 py-1.5 text-sm text-ink-700 peer-checked:border-amsi peer-checked:bg-amsi peer-checked:text-white">{opt}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+        <div class="rounded-2xl border border-sand-200 bg-white p-6">
+          <p class="text-sm font-semibold text-ink-900">Before you borrow</p>
+          <ul class="mt-3 list-disc space-y-2 pl-5 text-sm text-ink-700">
+            <li>Confirm the currency your repayments will actually be in.</li>
+            <li>Ask whether the payment plan itself already substitutes for financing.</li>
+            <li>Get any partner introduction terms in writing before sharing documents.</li>
+            <li>Amsi Spaces does not assess affordability or provide financial advice.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mt-6 overflow-x-auto rounded-2xl border border-sand-200 bg-white">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-sand-100 text-ink-500">
+            <tr><th class="px-4 py-3">Partner</th><th class="px-4 py-3">Markets covered</th><th class="px-4 py-3">Status</th></tr>
+          </thead>
+          <tbody>
+            <tr class="border-t border-sand-200"><td class="px-4 py-3 text-ink-500" colspan="3">No financing partner signed yet — check back soon.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-6 rounded-xl bg-sand-100 px-5 py-4 text-sm text-ink-700">
+        Referral partner: Amsi Spaces earns a fee only if a financing introduction leads to a
+        completed transaction. Amsi Spaces is not a lender and does not assess affordability.
+      </div>
+    </div>
+
+    <!-- E-guides -->
+    <div class="resource-panel mt-8" data-tab="eguides" hidden={activeTab !== 'eguides'}>
+      <div class="flex flex-wrap gap-2" role="group" aria-label="Filter e-guides">
+        {['All', 'Free', 'Paid', 'By Amsi', 'By partners'].map((chip, i) => (
+          <button class="eguide-filter rounded-full border border-ink-900/15 px-3 py-1.5 text-sm" data-filter={chip.toLowerCase().replace(/\s/g, '-')} aria-pressed={i === 0 ? 'true' : 'false'}>
+            {chip}
+          </button>
+        ))}
+      </div>
+      <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {eguides.map((g) => (
+          <div
+            class="eguide-card rounded-2xl border border-sand-200 bg-white p-6"
+            data-owner={g.owner}
+            data-type={g.type}
+          >
+            <div class="flex items-start justify-between gap-3">
+              <h3 class="font-serif text-base font-semibold text-ink-900">{g.title}</h3>
+              <LabelPill label={g.owner === 'amsi' ? 'referral-partner' : 'sponsored'} showTooltip={false} />
+            </div>
+            <p class="mt-2 text-xs uppercase tracking-wide text-ink-500">{g.owner === 'amsi' ? 'By Amsi' : 'By partner'} &middot; {g.type === 'free' ? 'Free' : `${g.currency} ${g.price}`}</p>
+            <p class="mt-2 text-sm text-ink-700">{g.summary}</p>
+            {g.owner === 'amsi' ? (
+              <button class="btn-primary mt-4 gumroad-button" data-gumroad-single-product="true" data-url={g.gumroadUrl}>
+                {g.type === 'free' ? 'Get it free' : 'Buy now'}
+              </button>
+            ) : (
+              <a href={g.externalUrl} target="_blank" rel="noopener sponsored" class="btn-secondary mt-4 inline-block">Visit partner site</a>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Gumroad overlay embed script — powers the in-page checkout for Amsi's own guides -->
+  <script src="https://gumroad.com/js/gumroad.js"></script>
+
+  <EnquiryFooter interestChips={['Tools & courses', 'Financing', 'E-guides', 'Something else']} />
+</BaseLayout>
+
+<script define:vars={{ activeTab }}>
+  const tabs = document.querySelectorAll('.resource-tab');
+  const panels = document.querySelectorAll('.resource-panel');
+  function showTab(tab) {
+    panels.forEach((p) => { p.hidden = p.dataset.tab !== tab; });
+    tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.tab === tab)));
+    const url = new URL(window.location.href);
+    url.searchParams.set('tab', tab);
+    window.history.replaceState({}, '', url);
+  }
+  tabs.forEach((t) => t.addEventListener('click', () => showTab(t.dataset.tab)));
+  showTab(activeTab);
+
+  const filters = document.querySelectorAll('.eguide-filter');
+  const cards = document.querySelectorAll('.eguide-card');
+  filters.forEach((btn) => btn.addEventListener('click', () => {
+    filters.forEach((b) => b.setAttribute('aria-pressed', 'false'));
+    btn.setAttribute('aria-pressed', 'true');
+    const f = btn.dataset.filter;
+    cards.forEach((card) => {
+      let show = true;
+      if (f === 'free') show = card.dataset.type === 'free';
+      if (f === 'paid') show = card.dataset.type === 'paid';
+      if (f === 'by-amsi') show = card.dataset.owner === 'amsi';
+      if (f === 'by-partners') show = card.dataset.owner === 'partner';
+      card.style.display = show ? '' : 'none';
+    });
+  }));
+</script>
+
+<style>
+  .resource-tab[aria-selected="true"] { @apply border-amsi text-amsi; }
+  .resource-tab[aria-selected="false"] { @apply border-transparent text-ink-500 hover:text-ink-900; }
+  .eguide-filter[aria-pressed="true"] { @apply border-amsi bg-amsi text-white; }
+</style>

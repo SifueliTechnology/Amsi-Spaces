@@ -1,0 +1,127 @@
+---
+export const prerender = false; // reads the live/cached Palmera catalogue per request
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import DisclosureBanner from '@/components/DisclosureBanner.astro';
+import PropertyCard from '@/components/PropertyCard.astro';
+import EnquiryFooter from '@/components/EnquiryFooter.astro';
+import { markets, getMarket } from '@/data/markets';
+import { fetchProjects } from '@/lib/palmera';
+
+const env = Astro.locals.runtime.env;
+
+const requestedMarket = Astro.url.searchParams.get('market') ?? 'uae';
+const activeMarket = getMarket(requestedMarket) ? requestedMarket : 'uae';
+
+// Fetch only the active market server-side (cheap — reads the KV cache);
+// switching tabs client-side re-fetches from /api/properties instead of
+// carrying all 5 markets' ~337 listings in one page load.
+const initialProperties = await fetchProjects(env, { market: activeMarket });
+---
+<BaseLayout title="Properties" description="Off-plan property projects across UAE, Cyprus, Oman, Saudi Arabia and Georgia.">
+  <div class="container-page py-10">
+    <h1 class="text-3xl font-semibold text-ink-900 sm:text-4xl">Properties</h1>
+    <p class="mt-2 max-w-2xl text-ink-700">
+      Live listings from our confirmed partner, Palmera Elite Real Estate Brokerage. "View
+      project" takes you straight to the partner's own page — that's the referral link itself.
+    </p>
+    <div class="mt-6"><DisclosureBanner compact /></div>
+
+    <!-- Market tabs -->
+    <div class="mt-8 flex flex-wrap gap-2 border-b border-sand-200 pb-px" role="tablist">
+      {markets.map((m) => (
+        <button
+          class="market-tab rounded-t-lg border-b-2 px-4 py-2 text-sm font-medium transition"
+          data-market={m.slug}
+          role="tab"
+          aria-selected={m.slug === activeMarket ? 'true' : 'false'}
+        >
+          {m.name}
+        </button>
+      ))}
+    </div>
+
+    <!-- Filter bar -->
+    <div class="mt-6 grid gap-3 rounded-xl border border-sand-200 bg-white p-4 sm:grid-cols-2 lg:grid-cols-6">
+      <select id="filter-place" class="rounded-lg border border-ink-900/15 px-3 py-2 text-sm"><option value="">All places</option></select>
+      <input id="filter-area" type="text" placeholder="Area" class="rounded-lg border border-ink-900/15 px-3 py-2 text-sm" />
+      <input id="filter-budget-min" type="number" placeholder="Min budget" class="rounded-lg border border-ink-900/15 px-3 py-2 text-sm" />
+      <input id="filter-budget-max" type="number" placeholder="Max budget" class="rounded-lg border border-ink-900/15 px-3 py-2 text-sm" />
+      <select id="filter-status" class="rounded-lg border border-ink-900/15 px-3 py-2 text-sm">
+        <option value="">Any status</option>
+        <option value="OFF_PLAN">Off-plan</option>
+        <option value="UNDER_CONSTRUCTION">Under construction</option>
+        <option value="READY">Ready</option>
+      </select>
+      <input id="filter-keyword" type="text" placeholder="Keyword" class="rounded-lg border border-ink-900/15 px-3 py-2 text-sm" />
+    </div>
+
+    <!-- Results grid: server-rendered for the initial market, then replaced
+         client-side (via /api/properties) whenever the tab or a filter changes. -->
+    <div id="results-grid" class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {initialProperties.map((property) => (
+        <div class="property-item">
+          <PropertyCard property={property} />
+        </div>
+      ))}
+    </div>
+    <p id="results-empty" class="mt-8 text-center text-sm text-ink-500" hidden>
+      No properties match these filters yet — try widening them.
+    </p>
+  </div>
+
+  <EnquiryFooter interestChips={['Buy', 'Invest', 'Something else']} />
+</BaseLayout>
+
+<script define:vars={{ activeMarket }}>
+  const tabs = document.querySelectorAll('.market-tab');
+  const grid = document.getElementById('results-grid');
+  const empty = document.getElementById('results-empty');
+  let currentMarket = activeMarket;
+
+  function currentFilters() {
+    return {
+      market: currentMarket,
+      place: document.getElementById('filter-place').value || undefined,
+      area: document.getElementById('filter-area').value || undefined,
+      budgetMin: document.getElementById('filter-budget-min').value || undefined,
+      budgetMax: document.getElementById('filter-budget-max').value || undefined,
+      completionStatus: document.getElementById('filter-status').value || undefined,
+      search: document.getElementById('filter-keyword').value || undefined,
+    };
+  }
+
+  async function refresh() {
+    const params = new URLSearchParams();
+    const filters = currentFilters();
+    Object.entries(filters).forEach(([k, v]) => { if (v) params.set(k, v); });
+
+    const url = new URL(window.location.href);
+    url.searchParams.set('market', currentMarket);
+    window.history.replaceState({}, '', url);
+
+    const res = await fetch(`/api/properties?${params.toString()}`);
+    if (!res.ok) return;
+    const { html } = await res.json();
+    grid.innerHTML = html;
+    empty.hidden = grid.children.length > 0;
+  }
+
+  tabs.forEach((tab) => tab.addEventListener('click', () => {
+    currentMarket = tab.dataset.market;
+    tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.market === currentMarket)));
+    refresh();
+  }));
+
+  ['filter-place', 'filter-area', 'filter-budget-min', 'filter-budget-max', 'filter-status', 'filter-keyword']
+    .forEach((id) => document.getElementById(id)?.addEventListener('input', refresh));
+</script>
+
+<style>
+  .market-tab[aria-selected="true"] {
+    @apply border-amsi text-amsi;
+  }
+  .market-tab[aria-selected="false"] {
+    @apply border-transparent text-ink-500 hover:text-ink-900;
+  }
+</style>

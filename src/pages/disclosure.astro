@@ -1,0 +1,55 @@
+---
+export const prerender = true; // static content only, no Cloudflare bindings needed
+
+// NOTE: the brief references finished drafts (disclosure.md, privacy.md,
+// terms.md) that were not included in the uploaded brief file — only their
+// key confirmed points were. The structure, labelling key and confirmed
+// points below are wired up correctly; replace the placeholder paragraphs
+// with the actual drafted legal text before this page ships, and get the
+// lawyer review the brief calls for (Section 6) regardless.
+import LegalLayout from '@/layouts/LegalLayout.astro';
+import LabelPill from '@/components/LabelPill.astro';
+
+const sections = [
+  { id: 'what-this-is', heading: 'What this page is' },
+  { id: 'labelling-key', heading: 'Labelling key' },
+  { id: 'our-partners', heading: 'Our partners' },
+  { id: 'how-we-choose', heading: 'How we choose partners' },
+  { id: 'not-a-broker', heading: 'What Amsi Spaces is not' },
+];
+---
+<LegalLayout
+  title="Affiliate & Referral Disclosure"
+  lastUpdated="[DATE — pending lawyer review]"
+  inShort="Amsi Spaces earns fees from referral and affiliate partners, always labelled next to the link. We are not a broker, agent, lender or adviser, and never handle your money."
+  sections={sections}
+>
+  <h2 id="what-this-is">What this page is</h2>
+  <p>[PLACEHOLDER — insert finalized disclosure.md content here.]</p>
+
+  <h2 id="labelling-key">Labelling key</h2>
+  <p>Two labels appear across this site, and they mean different things:</p>
+  <ul>
+    <li><LabelPill label="referral-partner" showTooltip={false} /> — property and financing partners. We're paid only if your enquiry leads to a completed transaction.</li>
+    <li><LabelPill label="sponsored" showTooltip={false} /> — tools, courses, general affiliate links, partner e-books, paid placements and display ads. We may be paid on a click or signup.</li>
+  </ul>
+  <p>You may also see <strong>Advertisement</strong> (a paid placement with no editorial input from us) and <strong>Amsi's pick</strong> (our own genuine recommendation, which may still carry a referral or affiliate link).</p>
+
+  <h2 id="our-partners">Our partners</h2>
+  <p>
+    Our first confirmed partner is <strong>Palmera Elite Real Estate Brokerage L.L.C.</strong>
+    (RERA Licence Dubai 40780, Trade Licence 1306924), covering UAE, Oman, Georgia and Cyprus.
+    We're paid 30% of Palmera's net commission, only on completed off-plan purchases from a
+    developer Palmera markets — never on resale or private-seller deals.
+  </p>
+
+  <h2 id="how-we-choose">How we choose partners</h2>
+  <p>We choose partners based on reliability, trustworthiness, and prior business experience together.</p>
+
+  <h2 id="not-a-broker">What Amsi Spaces is not</h2>
+  <p>
+    Amsi Spaces is not a licensed real estate broker, agent, lender or financial adviser in any
+    jurisdiction. We never negotiate on your behalf, never represent you in a transaction, and
+    never touch your funds.
+  </p>
+</LegalLayout>

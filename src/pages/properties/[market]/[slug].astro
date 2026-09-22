@@ -1,0 +1,133 @@
+---
+export const prerender = false; // live Palmera detail lookup by (market, slug)
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import EnquiryFooter from '@/components/EnquiryFooter.astro';
+import { getMarket } from '@/data/markets';
+import { fetchProjectBySlug, shouldShowPermit } from '@/lib/palmera';
+import { formatPrice } from '@/lib/currency';
+
+const env = Astro.locals.runtime.env;
+const { market: marketSlug, slug } = Astro.params;
+const market = getMarket(marketSlug!);
+const property = market ? await fetchProjectBySlug(env, market.slug, slug!) : undefined;
+
+if (!property || !market) {
+  return Astro.redirect('/properties');
+}
+
+const statusLabel: Record<string, string> = {
+  OFF_PLAN: 'Off-plan',
+  UNDER_CONSTRUCTION: 'Under construction',
+  READY: 'Ready',
+};
+---
+<BaseLayout title={property.title} description={`${property.title} by ${property.developerName} — ${market.name}, priced from ${formatPrice(property.priceFrom, property.currency)}.`}>
+  <div class="container-page py-10">
+    <nav class="text-sm text-ink-500">
+      <a href="/properties" class="hover:text-amsi">Properties</a> /
+      <a href={`/properties?market=${market.slug}`} class="hover:text-amsi">{market.name}</a> /
+      <span class="text-ink-900">{property.title}</span>
+    </nav>
+
+    <div class="mt-6 grid gap-10 lg:grid-cols-[1.5fr_1fr]">
+      <div>
+        <div class="overflow-hidden rounded-2xl bg-sand-100">
+          <img src={property.image.hero} srcset={property.image.srcset} alt={property.title} class="w-full object-cover" />
+        </div>
+
+        <div class="mt-6 flex flex-wrap items-center gap-3">
+          <span class="rounded-full bg-sand-100 px-3 py-1 text-sm font-medium text-ink-900">
+            {statusLabel[property.completionStatus] ?? property.completionStatus}
+          </span>
+          {property.handoverDate && <span class="text-sm text-ink-500">Handover {property.handoverDate}</span>}
+        </div>
+
+        <h1 class="mt-3 text-3xl font-semibold text-ink-900 sm:text-4xl">{property.title}</h1>
+        <p class="mt-1 text-ink-500">
+          {property.developerName} &middot; {market.name} &middot; {property.emirate?.replace(/-/g, ' ')}{property.area ? `, ${property.area.replace(/-/g, ' ')}` : ''}
+        </p>
+        <p class="mt-4 text-2xl font-semibold text-ink-900">
+          {property.priceOnApplication ? 'Price on application' : formatPrice(property.priceFrom, property.currency)}{property.priceNote ? ` ${property.priceNote}` : ''}
+        </p>
+
+        <!-- Payment plan -->
+        <section class="mt-10">
+          <h2 class="text-xl font-semibold text-ink-900">Payment plan</h2>
+          {property.paymentPlan == null && <p class="mt-2 text-sm text-ink-700">Payment plan available on request from the partner.</p>}
+          {property.paymentPlan?.shape === 'ratio' && (
+            <div>
+              <p class="mt-2 text-lg font-medium text-ink-900">{property.paymentPlan.value}</p>
+              <p class="mt-1 text-xs text-ink-500">First figure is the share paid during construction — not a deposit.</p>
+            </div>
+          )}
+          {property.paymentPlan?.shape === 'schedule' && (
+            <div class="mt-4 space-y-6">
+              {property.paymentPlan.options.map((option) => (
+                <div class="rounded-xl border border-sand-200 p-4">
+                  {option.label && <p class="font-medium text-ink-900">{option.label}</p>}
+                  {option.description && <p class="mt-1 text-sm text-ink-500">{option.description}</p>}
+                  <ul class="mt-2 space-y-1.5 text-sm text-ink-700">
+                    {option.steps.map((step) => (
+                      <li class="flex justify-between gap-4">
+                        <span>{step.label}{step.timing ? ` — ${step.timing}` : ''}</span>
+                        {step.percent != null && <span class="font-medium text-ink-900">{step.percent}%</span>}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <!-- Permit block — only when Palmera's live data actually includes one -->
+        {shouldShowPermit(property) && (
+          <section class="mt-10 rounded-2xl border border-sand-200 bg-sand-50 p-5">
+            <h2 class="text-lg font-semibold text-ink-900">Advertising permit</h2>
+            <dl class="mt-3 grid gap-2 text-sm sm:grid-cols-2">
+              <div><dt class="text-ink-500">Permit number</dt><dd class="font-medium text-ink-900">{property.permitNumber}</dd></div>
+              <div><dt class="text-ink-500">Authority</dt><dd class="font-medium text-ink-900">Dubai Land Department</dd></div>
+              {property.permitExpiresAt && (
+                <div><dt class="text-ink-500">Expires</dt><dd class="font-medium text-ink-900">{new Date(property.permitExpiresAt).toLocaleDateString('en-AE')}</dd></div>
+              )}
+            </dl>
+            {property.permitVerifyUrl && (
+              <a href={property.permitVerifyUrl} target="_blank" rel="noopener" class="mt-3 inline-block text-sm font-medium text-amsi hover:underline">
+                Verify this permit &rarr;
+              </a>
+            )}
+          </section>
+        )}
+
+        <!-- Trust note -->
+        <div class="mt-10 rounded-xl bg-sand-100 px-5 py-4 text-sm text-ink-700">
+          Amsi Spaces is a referral partner, not a broker, agent or lender. We never handle payment
+          or negotiate for you — "View project" takes you directly to the partner's own page.
+        </div>
+      </div>
+
+      <!-- Sidebar CTA -->
+      <aside class="h-fit rounded-2xl border border-sand-200 bg-white p-6 lg:sticky lg:top-24">
+        <p class="text-sm font-semibold uppercase tracking-wide text-ink-500">Referral partner</p>
+        <a href={property.shareUrl} target="_blank" rel="noopener sponsored" class="btn-primary mt-4 block text-center">
+          View project on partner site
+        </a>
+        <a
+          href="#enquiry"
+          class="btn-secondary mt-3 block text-center"
+          data-enquiry-project-title={property.title}
+          data-enquiry-project-source={property.source}
+          data-enquiry-project-id={property.id}
+        >
+          Ask Amsi about this
+        </a>
+        <p class="mt-4 text-xs text-ink-500">
+          No yield or return figures are shown for any project, per our disclosure policy.
+        </p>
+      </aside>
+    </div>
+  </div>
+
+  <EnquiryFooter context={property.title} projectSource={property.source} projectId={property.id} />
+</BaseLayout>

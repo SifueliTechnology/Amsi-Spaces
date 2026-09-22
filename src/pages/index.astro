@@ -1,0 +1,136 @@
+---
+export const prerender = false; // needs live/cached Palmera data for featured properties
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import DisclosureBanner from '@/components/DisclosureBanner.astro';
+import PropertyCard from '@/components/PropertyCard.astro';
+import EnquiryFooter from '@/components/EnquiryFooter.astro';
+import { markets } from '@/data/markets';
+import { fetchProjects } from '@/lib/palmera';
+
+const env = Astro.locals.runtime.env;
+
+// Featured properties pulled from at least two different markets (brief spec).
+const uae = (await fetchProjects(env, { market: 'uae' })).slice(0, 2);
+const cyprus = (await fetchProjects(env, { market: 'cyprus' })).slice(0, 1);
+const georgia = (await fetchProjects(env, { market: 'georgia' })).slice(0, 1);
+const featured = [...uae, ...cyprus, ...georgia];
+---
+<BaseLayout title="Home">
+  <!-- Hero -->
+  <section class="bg-gradient-to-b from-sand-100 to-sand-50 py-16 sm:py-24">
+    <div class="container-page">
+      <p class="text-sm font-medium uppercase tracking-wide text-amsi">
+        UAE &middot; Cyprus &middot; Oman &middot; Saudi Arabia &middot; Georgia
+      </p>
+      <h1 class="mt-3 max-w-2xl text-4xl font-semibold leading-tight text-ink-900 sm:text-5xl">
+        A trusted way in to off-plan property across five markets.
+      </h1>
+      <p class="mt-5 max-w-xl text-lg text-ink-700">
+        Amsi Spaces connects you with vetted partners for property, financing, tools and courses.
+        We're a referral partner, not a broker — we never negotiate on your behalf or touch your money.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/properties" class="btn-primary">Browse properties</a>
+        <a href="#enquiry" class="btn-secondary">Ask Amsi</a>
+      </div>
+
+      <!-- Market selector row -->
+      <div class="mt-12 flex flex-wrap gap-3">
+        {markets.map((m) => (
+          <a
+            href={`/properties?market=${m.slug}`}
+            class="rounded-xl border border-sand-200 bg-white px-4 py-3 text-sm transition hover:border-amsi hover:shadow-sm"
+          >
+            <span class="block font-medium text-ink-900">{m.name}</span>
+            <span class="block text-xs text-ink-500">{m.currency}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <div class="container-page py-6">
+    <DisclosureBanner compact />
+  </div>
+
+  <!-- Featured properties -->
+  <section class="py-14">
+    <div class="container-page">
+      <div class="flex items-end justify-between">
+        <h2 class="text-2xl font-semibold text-ink-900 sm:text-3xl">Featured off-plan projects</h2>
+        <a href="/properties" class="text-sm font-medium text-amsi hover:underline">View all &rarr;</a>
+      </div>
+      <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {featured.map((property) => <PropertyCard property={property} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Ways to work with Amsi -->
+  <section class="bg-white py-14">
+    <div class="container-page">
+      <h2 class="text-2xl font-semibold text-ink-900 sm:text-3xl">Ways to work with Amsi</h2>
+      <p class="mt-2 max-w-2xl text-ink-700">
+        Each of these is a referral relationship — Amsi introduces you to a vetted partner and
+        earns a fee only when it leads somewhere. We never act as your agent.
+      </p>
+      <div class="mt-8 grid gap-6 sm:grid-cols-3">
+        <div class="rounded-2xl border border-sand-200 p-6">
+          <h3 class="font-serif text-xl font-semibold text-ink-900">Buy</h3>
+          <p class="mt-2 text-sm text-ink-700">
+            Browse off-plan projects across five markets and get introduced to the developer's
+            partner directly — you deal with them, not us.
+          </p>
+          <a href="/properties" class="mt-4 inline-block text-sm font-medium text-amsi hover:underline">Browse properties &rarr;</a>
+        </div>
+        <div class="rounded-2xl border border-sand-200 p-6">
+          <h3 class="font-serif text-xl font-semibold text-ink-900">Invest</h3>
+          <p class="mt-2 text-sm text-ink-700">
+            Compare markets, payment plans and completion timelines. We never quote yield or
+            return projections — that's for you and your adviser to work out.
+          </p>
+          <a href="/blog" class="mt-4 inline-block text-sm font-medium text-amsi hover:underline">Read market guides &rarr;</a>
+        </div>
+        <div class="rounded-2xl border border-sand-200 p-6">
+          <h3 class="font-serif text-xl font-semibold text-ink-900">Finance</h3>
+          <p class="mt-2 text-sm text-ink-700">
+            Referral introductions to financing partners, labelled distinctly from our
+            affiliate "Sponsored" content.
+          </p>
+          <a href="/resources?tab=financing" class="mt-4 inline-block text-sm font-medium text-amsi hover:underline">See financing &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Meet Amsi -->
+  <section class="py-14">
+    <div class="container-page grid gap-10 lg:grid-cols-2 lg:items-center">
+      <div>
+        <h2 class="text-2xl font-semibold text-ink-900 sm:text-3xl">Meet Amsi</h2>
+        <p class="mt-4 text-ink-700">
+          Amsi Spaces is run by Michael Kisanga, connecting people across North America, Africa,
+          Europe and Australia with vetted real estate, financing, tools and course partners in
+          five markets. Amsi is a referral partner — never a licensed broker, agent, lender or
+          financial adviser — and never negotiates on your behalf or handles your money.
+        </p>
+        <p class="mt-4 text-ink-700">
+          Every enquiry is reviewed personally. If you want to move forward with a partner, that
+          introduction is made manually, with your consent, every time.
+        </p>
+      </div>
+      <div class="rounded-2xl border border-sand-200 bg-white p-6">
+        <p class="text-sm font-semibold uppercase tracking-wide text-ink-500">Resources</p>
+        <ul class="mt-4 space-y-3 text-sm">
+          <li><a href="/resources?tab=financing" class="font-medium text-ink-900 hover:text-amsi">Financing options &rarr;</a></li>
+          <li><a href="/resources?tab=eguides" class="font-medium text-ink-900 hover:text-amsi">Free & paid e-guides &rarr;</a></li>
+          <li><a href="/resources?tab=tools" class="font-medium text-ink-900 hover:text-amsi">Tools &rarr;</a></li>
+          <li><a href="/resources?tab=courses" class="font-medium text-ink-900 hover:text-amsi">Courses &rarr;</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <EnquiryFooter />
+</BaseLayout>

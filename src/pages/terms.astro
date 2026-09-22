@@ -1,0 +1,47 @@
+---
+export const prerender = true; // static content only, no Cloudflare bindings needed
+
+import LegalLayout from '@/layouts/LegalLayout.astro';
+
+const sections = [
+  { id: 'about-amsi', heading: 'About Amsi Spaces' },
+  { id: 'no-license-claims', heading: 'No licence claims' },
+  { id: 'no-yield-figures', heading: 'No yield or return figures' },
+  { id: 'referrals', heading: 'How referrals work' },
+  { id: 'governing-law', heading: 'Governing law' },
+  { id: 'contact', heading: 'Contact' },
+];
+---
+<LegalLayout
+  title="Terms of Use"
+  lastUpdated="[DATE — pending lawyer review]"
+  inShort="Amsi Spaces is a referral and content site, not a broker. Using this site means accepting that we introduce you to partners but never negotiate, represent, or handle funds on your behalf."
+  sections={sections}
+>
+  <h2 id="about-amsi">About Amsi Spaces</h2>
+  <p>[PLACEHOLDER — insert finalized terms.md content here.] Amsi Spaces (legal name: Amsi Spaces) is operated by Michael Kisanga. Contact: michael@amsispaces.com.</p>
+
+  <h2 id="no-license-claims">No licence claims</h2>
+  <p>Amsi Spaces makes no claim to be a licensed real estate broker, agent, lender or financial adviser in any jurisdiction.</p>
+
+  <h2 id="no-yield-figures">No yield or return figures</h2>
+  <p>We never publish yield, return, income or visa-outcome projections for any project or partner, on this site or in any advertising.</p>
+
+  <h2 id="referrals">How referrals work</h2>
+  <p>
+    Where a page or listing is labelled "Referral partner," we earn a fee only if your enquiry
+    leads to a completed transaction with that partner. Where labelled "Sponsored," we may earn a
+    fee on a click or signup. We never negotiate on your behalf and never handle your funds.
+  </p>
+
+  <h2 id="governing-law">Governing law</h2>
+  <p>
+    [PLACEHOLDER — clause 14: these Terms are governed by the laws of the United Republic of
+    Tanzania. Whether jurisdiction is exclusive or non-exclusive is still flagged for a lawyer's
+    final decision — do not remove this note until that's resolved.] This is separate from the
+    Palmera partnership itself, which is governed by UAE/Dubai courts under its own agreement.
+  </p>
+
+  <h2 id="contact">Contact</h2>
+  <p>Questions about these Terms: <a href="mailto:michael@amsispaces.com">michael@amsispaces.com</a>.</p>
+</LegalLayout>

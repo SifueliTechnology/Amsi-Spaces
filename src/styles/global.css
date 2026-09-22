@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Tailwind's `.grid`/`.flex` utilities have the same specificity as the
+     native [hidden] attribute, and author rules beat the UA stylesheet
+     regardless — so a hidden panel that also has `grid` on it stays
+     visible unless we force this. Affects the market/resource tab panels. */
+  [hidden] {
+    display: none !important;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-sand-50 text-ink-900 font-sans antialiased;
+  }
+  h1, h2, h3 {
+    @apply font-serif;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-amsi px-5 py-2.5 text-sm font-medium text-white transition hover:bg-amsi-dark;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-full border border-ink-900/15 bg-white px-5 py-2.5 text-sm font-medium text-ink-900 transition hover:border-ink-900/30;
+  }
+  .label-pill {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium;
+  }
+  .label-referral {
+    @apply label-pill bg-referral-bg text-referral;
+  }
+  .label-sponsored {
+    @apply label-pill bg-sponsored-bg text-sponsored;
+  }
+}

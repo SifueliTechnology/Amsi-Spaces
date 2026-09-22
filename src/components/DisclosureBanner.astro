@@ -1,0 +1,15 @@
+---
+// Appears on every page carrying a "Referral partner" or "Sponsored" label,
+// plus inline at the top of any blog article using one (brief Section 2).
+interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+---
+<div class={`bg-sand-100 border border-sand-200 rounded-xl text-sm text-ink-700 ${compact ? 'px-4 py-2.5' : 'px-5 py-3.5'}`}>
+  <p>
+    This page contains referral and/or sponsored links, always labelled next to the link itself.
+    Amsi Spaces is not a licensed broker, agent, lender or financial adviser.
+    <a href="/disclosure" class="underline hover:text-amsi">Read the full disclosure</a>.
+  </p>
+</div>

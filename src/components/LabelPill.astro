@@ -1,0 +1,22 @@
+---
+// Sitewide disclosure label — "Referral partner" or "Sponsored". Never
+// interchangeable (brief Section 2). Always render next to the link/element
+// it describes, never only in a footnote.
+import { labelCopy, type DisclosureLabel } from '@/data/partners';
+
+interface Props {
+  label: DisclosureLabel;
+  showTooltip?: boolean;
+}
+const { label, showTooltip = true } = Astro.props;
+const copy = labelCopy[label];
+const className = label === 'referral-partner' ? 'label-referral' : 'label-sponsored';
+---
+<span class={className} title={showTooltip ? copy.description : undefined}>
+  {label === 'referral-partner' ? (
+    <svg class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 2a1 1 0 01.894.553l1.382 2.764 3.05.443a1 1 0 01.554 1.706l-2.207 2.15.521 3.037a1 1 0 01-1.451 1.054L10 12.202l-2.743 1.505a1 1 0 01-1.451-1.054l.52-3.037-2.206-2.15a1 1 0 01.554-1.706l3.05-.443L9.106 2.553A1 1 0 0110 2z"/></svg>
+  ) : (
+    <svg class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4zm14 5H2v5a2 2 0 002 2h12a2 2 0 002-2V9z" clip-rule="evenodd"/></svg>
+  )}
+  {copy.text}
+</span>

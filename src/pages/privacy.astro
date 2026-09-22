@@ -1,0 +1,49 @@
+---
+export const prerender = true; // static content only, no Cloudflare bindings needed
+
+import LegalLayout from '@/layouts/LegalLayout.astro';
+
+const sections = [
+  { id: 'what-we-collect', heading: 'What we collect' },
+  { id: 'how-we-use-it', heading: 'How we use it' },
+  { id: 'retention', heading: 'Data retention' },
+  { id: 'sharing', heading: 'Sharing with partners' },
+  { id: 'cookies', heading: 'Cookies' },
+  { id: 'your-rights', heading: 'Your rights' },
+  { id: 'contact', heading: 'Contact' },
+];
+---
+<LegalLayout
+  title="Privacy Policy"
+  lastUpdated="[DATE — pending lawyer review]"
+  inShort="We collect only what you give us through the enquiry form, keep it for a limited time, and share it with a partner only when you ask us to register your interest with them."
+  sections={sections}
+>
+  <h2 id="what-we-collect">What we collect</h2>
+  <p>[PLACEHOLDER — insert finalized privacy.md content here.] In general: name, email, optional phone number, contact preference, and whatever you write in the enquiry message. We also log basic technical data (IP, user agent) for spam and abuse prevention.</p>
+
+  <h2 id="how-we-use-it">How we use it</h2>
+  <p>To reply to your enquiry personally, and — only if you choose to proceed — to register your interest manually with the relevant partner (e.g. Palmera). We do not sell your data.</p>
+
+  <h2 id="retention">Data retention</h2>
+  <p>
+    [PLACEHOLDER — brief suggests defaults of 12 months for enquiry records and 90 days for raw
+    click/analytics logs, pending lawyer confirmation.]
+  </p>
+
+  <h2 id="sharing">Sharing with partners</h2>
+  <p>
+    We only share your details with a partner (such as Palmera) when you explicitly ask to move
+    forward, and we register that lead manually — there is currently no automated lead-submission
+    integration with Palmera.
+  </p>
+
+  <h2 id="cookies">Cookies</h2>
+  <p>We use Essential cookies to run the site, and — only with your consent — Analytics and Advertising cookies. You can change your choice at any time via the cookie banner.</p>
+
+  <h2 id="your-rights">Your rights</h2>
+  <p>[PLACEHOLDER — insert applicable rights under Tanzania's Personal Data Protection Act, 2022 and, where relevant, UAE PDPL, once confirmed by counsel.]</p>
+
+  <h2 id="contact">Contact</h2>
+  <p>Questions about this policy: <a href="mailto:michael@amsispaces.com">michael@amsispaces.com</a>.</p>
+</LegalLayout>

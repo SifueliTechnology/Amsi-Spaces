@@ -1,0 +1,41 @@
+# Cloudflare Pages configuration for amsispaces.com
+# Deploy with: npm run pages:deploy   (or `wrangler pages deploy dist`)
+
+name = "amsi-spaces"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+# --- D1 database (leads, click logs, webhook events) ---
+[[d1_databases]]
+binding = "DB"
+database_name = "amsi_spaces"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+
+# --- KV namespace: caches the Palmera catalogue (synced daily/on demand via
+# /api/palmera-sync) so /properties reads are fast and don't hit Palmera's
+# rate limits on every visitor. ---
+[[kv_namespaces]]
+binding = "PALMERA_CACHE"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+# --- Non-secret environment variables ---
+[vars]
+ALERT_EMAIL_TO = "michael@amsispaces.com"
+ALERT_EMAIL_FROM = "leads@amsispaces.com"
+
+# --- Secrets — never put these here. Set with:
+#   wrangler pages secret put PALMERA_KEY              # from Palmera's partner area
+#   wrangler pages secret put PALMERA_WEBHOOK_SECRET    # from the same webhook endpoint's settings
+#   wrangler pages secret put PALMERA_SYNC_SECRET       # one you generate yourself, e.g. `openssl rand -hex 32`
+#   wrangler pages secret put TURNSTILE_SECRET_KEY
+#   wrangler pages secret put ALERT_EMAIL_API_KEY
+#   wrangler pages secret put N8N_LEAD_WEBHOOK_URL      # optional
+#
+# PALMERA_KEY: a live key (ppk_live_...) from https://account.palmera.realestate/partner/api,
+#   scoped to at least projects:read and leads:write (add leads:read if you
+#   want to poll status directly instead of relying on webhooks).
+# PALMERA_WEBHOOK_SECRET: shown once when you create the webhook endpoint in
+#   the same partner area — pointed at https://amsispaces.com/api/palmera-webhook.
+# PALMERA_SYNC_SECRET: not from Palmera — a secret *you* generate, checked by
+#   /api/palmera-sync so only your own external scheduler can trigger it.
