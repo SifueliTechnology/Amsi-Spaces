@@ -7,6 +7,8 @@ import LabelPill from '@/components/LabelPill.astro';
 import EnquiryFooter from '@/components/EnquiryFooter.astro';
 import { markets } from '@/data/markets';
 import { eguides } from '@/data/eguides';
+import { tools } from '@/data/tools';
+import { courses } from '@/data/courses';
 
 const tabs = [
   { id: 'tools', label: 'Tools' },
@@ -16,16 +18,6 @@ const tabs = [
 ];
 const requestedTab = Astro.url.searchParams.get('tab');
 const activeTab = tabs.some((t) => t.id === requestedTab) ? requestedTab! : 'tools';
-
-// Placeholder tools/courses — swap for real affiliate partners once signed.
-const tools = [
-  { name: 'Mortgage Repayment Calculator', blurb: 'Estimate monthly repayments across currencies.', href: '/go/tool-calculator-partner' },
-  { name: 'Currency Converter Widget', blurb: 'Live rates for AED, EUR, OMR, SAR, USD.', href: '/go/tool-fx-partner' },
-];
-const courses = [
-  { name: 'Off-Plan Investing 101', blurb: 'A partner-run video course for first-time buyers.', href: '/go/course-offplan-101' },
-  { name: 'Understanding Payment Plans', blurb: 'A short course on schedule vs ratio payment plans.', href: '/go/course-payment-plans' },
-];
 ---
 <BaseLayout title="Resources" description="Tools, courses, financing and e-guides for off-plan property buyers.">
   <div class="container-page py-10">
