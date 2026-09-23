@@ -148,6 +148,7 @@ export interface SyncDiagnostics {
   lastLineParsed: boolean;
   lastLinePreview: string;
   firstSkippedLinePreview: string | null;
+  sampleProjectLine: string | null;
 }
 
 export async function syncCatalogue(
@@ -177,22 +178,28 @@ export async function syncCatalogue(
 
     const etag = res.headers.get('ETag');
     const text = await res.text();
-    // Newline-delimited JSON: a metadata line, one project per line, then a
-    // count line. Keep only lines that parse as a project (has `id`+`source`).
+    // Newline-delimited JSON. Each line carries a `kind` discriminator:
+    // "meta" (header), "project" (one per project — fields nested under
+    // `project`, not top-level), "end" (footer with the total emitted).
     const projects: Project[] = [];
     let cursor: string | null = null;
     const lines = text.split('\n').filter((l) => l.trim());
     let skippedLineCount = 0;
     let firstSkippedLinePreview: string | null = null;
+    let sampleProjectLine: string | null = null;
     let lastLineParsed = true;
     for (const [i, line] of lines.entries()) {
       try {
         const parsed = JSON.parse(line);
-        if (parsed.id && parsed.source && parsed.title) {
-          projects.push(parsed as Project);
+        const candidate = parsed.kind === 'project' && parsed.project ? parsed.project : parsed;
+        if (candidate.id && candidate.source && candidate.title) {
+          projects.push(candidate as Project);
         } else {
           skippedLineCount++;
           if (firstSkippedLinePreview === null) firstSkippedLinePreview = line.slice(0, 200);
+          if (sampleProjectLine === null && parsed.kind === 'project') {
+            sampleProjectLine = line.slice(0, 1000);
+          }
         }
         if (parsed.cursor) cursor = parsed.cursor;
       } catch {
@@ -207,6 +214,7 @@ export async function syncCatalogue(
       lineCount: lines.length,
       parsedProjectCount: projects.length,
       skippedLineCount,
+      sampleProjectLine,
       lastLineParsed,
       lastLinePreview: (lines[lines.length - 1] ?? '').slice(-200),
       firstSkippedLinePreview,
