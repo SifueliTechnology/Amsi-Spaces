@@ -23,16 +23,16 @@ export const POST: APIRoute = async ({ request, locals }) => {
     return new Response('Unauthorized', { status: 401 });
   }
 
+  const noStore = { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' };
+
   try {
     const forceFull = request.headers.get('X-Full-Sync') === 'true';
     const result = await syncCatalogue(env, { forceFull });
-    return new Response(JSON.stringify({ ok: true, ...result }), {
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return new Response(JSON.stringify({ ok: true, ...result }), { headers: noStore });
   } catch (err) {
     return new Response(JSON.stringify({ ok: false, error: String(err) }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json' },
+      headers: noStore,
     });
   }
 };
@@ -41,23 +41,22 @@ export const POST: APIRoute = async ({ request, locals }) => {
 // same auth requirement, via a query param instead of a header. Add
 // &full=true to force a fresh full re-export (clears the stored cursor/ETag
 // first) instead of an incremental delta — useful to recover from a partial
-// first sync.
+// first sync. Never cached — every hit re-runs the sync.
 export const GET: APIRoute = async ({ url, locals }) => {
   const env = locals.runtime.env;
   const provided = url.searchParams.get('secret');
+  const noStore = { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' };
   if (!env.PALMERA_SYNC_SECRET || provided !== env.PALMERA_SYNC_SECRET) {
-    return new Response('Unauthorized', { status: 401 });
+    return new Response('Unauthorized', { status: 401, headers: { 'Cache-Control': 'no-store' } });
   }
   try {
     const forceFull = url.searchParams.get('full') === 'true';
     const result = await syncCatalogue(env, { forceFull });
-    return new Response(JSON.stringify({ ok: true, ...result }), {
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return new Response(JSON.stringify({ ok: true, ...result }), { headers: noStore });
   } catch (err) {
     return new Response(JSON.stringify({ ok: false, error: String(err) }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json' },
+      headers: noStore,
     });
   }
 };
