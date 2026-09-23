@@ -14,11 +14,18 @@ import { blogPosts } from '@/data/blogPosts';
 
 const env = Astro.locals.runtime.env;
 
-// Featured properties pulled from at least two different markets (brief spec).
-const uae = (await fetchProjects(env, { market: 'uae' })).slice(0, 2);
-const cyprus = (await fetchProjects(env, { market: 'cyprus' })).slice(0, 1);
-const georgia = (await fetchProjects(env, { market: 'georgia' })).slice(0, 1);
-const featured = [...uae, ...cyprus, ...georgia];
+// Featured properties pulled from at least two different markets (brief
+// spec). Never let a data problem blank the whole homepage — an empty
+// featured grid is fine, a missing page is not.
+let featured: Awaited<ReturnType<typeof fetchProjects>> = [];
+try {
+  const uae = (await fetchProjects(env, { market: 'uae' })).slice(0, 2);
+  const cyprus = (await fetchProjects(env, { market: 'cyprus' })).slice(0, 1);
+  const georgia = (await fetchProjects(env, { market: 'georgia' })).slice(0, 1);
+  featured = [...uae, ...cyprus, ...georgia];
+} catch {
+  // leave featured empty
+}
 
 const homeTools = tools.slice(0, 2);
 const homeCourses = courses.slice(0, 2);

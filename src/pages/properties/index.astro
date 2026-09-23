@@ -15,8 +15,15 @@ const activeMarket = getMarket(requestedMarket) ? requestedMarket : 'uae';
 
 // Fetch only the active market server-side (cheap — reads the KV cache);
 // switching tabs client-side re-fetches from /api/properties instead of
-// carrying all 5 markets' ~337 listings in one page load.
-const initialProperties = await fetchProjects(env, { market: activeMarket });
+// carrying all 5 markets' ~337 listings in one page load. Never let a
+// data problem blank the whole page — show it with zero results instead.
+let initialProperties: Awaited<ReturnType<typeof fetchProjects>> = [];
+let loadError = false;
+try {
+  initialProperties = await fetchProjects(env, { market: activeMarket });
+} catch {
+  loadError = true;
+}
 ---
 <BaseLayout title="Properties" description="Off-plan property projects across UAE, Cyprus, Oman, Saudi Arabia and Georgia.">
   <div class="container-page py-10">
@@ -56,6 +63,12 @@ const initialProperties = await fetchProjects(env, { market: activeMarket });
       <input id="filter-keyword" type="text" placeholder="Keyword" class="rounded-lg border border-ink-900/15 px-3 py-2 text-sm" />
     </div>
 
+    {loadError && (
+      <p class="mt-8 text-center text-sm text-ink-500">
+        We couldn't load listings just now — please refresh, or check back shortly.
+      </p>
+    )}
+
     <!-- Results grid: server-rendered for the initial market, then replaced
          client-side (via /api/properties) whenever the tab or a filter changes. -->
     <div id="results-grid" class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -65,7 +78,7 @@ const initialProperties = await fetchProjects(env, { market: activeMarket });
         </div>
       ))}
     </div>
-    <p id="results-empty" class="mt-8 text-center text-sm text-ink-500" hidden>
+    <p id="results-empty" class="mt-8 text-center text-sm text-ink-500" hidden={loadError || initialProperties.length > 0}>
       No properties match these filters yet — try widening them.
     </p>
   </div>

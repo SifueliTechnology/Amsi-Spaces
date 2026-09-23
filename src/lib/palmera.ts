@@ -149,6 +149,8 @@ export interface SyncDiagnostics {
   lastLinePreview: string;
   firstSkippedLinePreview: string | null;
   sampleProjectLine: string | null;
+  firstParsedProjectKeys: string[] | null;
+  firstParsedProjectPreview: string | null;
 }
 
 export async function syncCatalogue(
@@ -215,6 +217,8 @@ export async function syncCatalogue(
       parsedProjectCount: projects.length,
       skippedLineCount,
       sampleProjectLine,
+      firstParsedProjectKeys: projects[0] ? Object.keys(projects[0]) : null,
+      firstParsedProjectPreview: projects[0] ? JSON.stringify(projects[0]).slice(0, 1500) : null,
       lastLineParsed,
       lastLinePreview: (lines[lines.length - 1] ?? '').slice(-200),
       firstSkippedLinePreview,
@@ -272,12 +276,25 @@ export async function syncCatalogue(
   return { changed: data.items.length > 0, count: updated.length };
 }
 
+/**
+ * Every page/component that renders a Project assumes these fields exist
+ * (image.card/srcset, title, shareUrl, id, source) — a project missing any
+ * of them would crash the page it's rendered on (undefined.card, etc). Drop
+ * those here, once, so every caller (pages, the API route) is protected the
+ * same way instead of each needing its own defensive checks.
+ */
+function isRenderable(p: Project): boolean {
+  return Boolean(
+    p && p.id && p.source && p.title && p.shareUrl && p.image && p.image.card && p.image.srcset,
+  );
+}
+
 /** Read from the KV cache (populated by syncCatalogue) with in-request filtering. */
 export async function fetchProjects(env: PalmeraEnv, filters: ProjectFilters = {}): Promise<Project[]> {
   const raw = await env.PALMERA_CACHE.get(CATALOGUE_KV_KEY);
   let results: Project[];
   if (raw) {
-    results = JSON.parse(raw);
+    results = (JSON.parse(raw) as Project[]).filter(isRenderable);
   } else {
     // No sync has run yet (fresh deploy, or KV binding missing in local dev)
     // — fall back to the bundled sample so pages still render correctly.
