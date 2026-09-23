@@ -140,7 +140,25 @@ export async function getMe(key: string) {
  * changed — skip straight to the incremental /projects/changes call, which
  * uses its own cursor and is safe to call more often than once a day too.
  */
-export async function syncCatalogue(env: PalmeraEnv): Promise<{ changed: boolean; count: number }> {
+export interface SyncDiagnostics {
+  rawBytes: number;
+  lineCount: number;
+  parsedProjectCount: number;
+  skippedLineCount: number;
+  lastLineParsed: boolean;
+  lastLinePreview: string;
+  firstSkippedLinePreview: string | null;
+}
+
+export async function syncCatalogue(
+  env: PalmeraEnv,
+  options: { forceFull?: boolean } = {},
+): Promise<{ changed: boolean; count: number; diagnostics?: SyncDiagnostics }> {
+  if (options.forceFull) {
+    await env.PALMERA_CACHE.delete(CURSOR_KV_KEY);
+    await env.PALMERA_CACHE.delete(ETAG_KV_KEY);
+  }
+
   const storedEtag = await env.PALMERA_CACHE.get(ETAG_KV_KEY);
   const storedCursor = await env.PALMERA_CACHE.get(CURSOR_KV_KEY);
 
@@ -163,15 +181,45 @@ export async function syncCatalogue(env: PalmeraEnv): Promise<{ changed: boolean
     // count line. Keep only lines that parse as a project (has `id`+`source`).
     const projects: Project[] = [];
     let cursor: string | null = null;
-    for (const line of text.split('\n')) {
-      if (!line.trim()) continue;
+    const lines = text.split('\n').filter((l) => l.trim());
+    let skippedLineCount = 0;
+    let firstSkippedLinePreview: string | null = null;
+    let lastLineParsed = true;
+    for (const [i, line] of lines.entries()) {
       try {
         const parsed = JSON.parse(line);
-        if (parsed.id && parsed.source && parsed.title) projects.push(parsed as Project);
+        if (parsed.id && parsed.source && parsed.title) {
+          projects.push(parsed as Project);
+        } else {
+          skippedLineCount++;
+          if (firstSkippedLinePreview === null) firstSkippedLinePreview = line.slice(0, 200);
+        }
         if (parsed.cursor) cursor = parsed.cursor;
       } catch {
-        // metadata/count lines that aren't full projects — skip
+        skippedLineCount++;
+        if (firstSkippedLinePreview === null) firstSkippedLinePreview = line.slice(0, 200);
+        if (i === lines.length - 1) lastLineParsed = false;
       }
+    }
+
+    const diagnostics: SyncDiagnostics = {
+      rawBytes: text.length,
+      lineCount: lines.length,
+      parsedProjectCount: projects.length,
+      skippedLineCount,
+      lastLineParsed,
+      lastLinePreview: (lines[lines.length - 1] ?? '').slice(-200),
+      firstSkippedLinePreview,
+    };
+
+    // If the response looks truncated mid-stream (last line isn't valid
+    // JSON), don't persist a partial catalogue or a cursor that would lock
+    // us into incremental-only syncs from here on — surface the diagnostics
+    // instead so the real cause can be found before anything is cached.
+    if (!lastLineParsed) {
+      throw new Error(
+        `GET /projects/export looks truncated: ${JSON.stringify(diagnostics)}`,
+      );
     }
 
     await env.PALMERA_CACHE.put(CATALOGUE_KV_KEY, JSON.stringify(projects));
@@ -180,7 +228,7 @@ export async function syncCatalogue(env: PalmeraEnv): Promise<{ changed: boolean
     // the next run uses /projects/changes instead of re-exporting.
     await env.PALMERA_CACHE.put(CURSOR_KV_KEY, cursor ?? new Date().toISOString());
 
-    return { changed: true, count: projects.length };
+    return { changed: true, count: projects.length, diagnostics };
   }
 
   // Subsequent runs: incremental delta only.

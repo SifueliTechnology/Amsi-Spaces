@@ -3,10 +3,14 @@ export const prerender = false; // needs live/cached Palmera data for featured p
 
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import DisclosureBanner from '@/components/DisclosureBanner.astro';
+import LabelPill from '@/components/LabelPill.astro';
 import PropertyCard from '@/components/PropertyCard.astro';
 import EnquiryFooter from '@/components/EnquiryFooter.astro';
 import { markets } from '@/data/markets';
 import { fetchProjects } from '@/lib/palmera';
+import { tools } from '@/data/tools';
+import { courses } from '@/data/courses';
+import { blogPosts } from '@/data/blogPosts';
 
 const env = Astro.locals.runtime.env;
 
@@ -15,6 +19,12 @@ const uae = (await fetchProjects(env, { market: 'uae' })).slice(0, 2);
 const cyprus = (await fetchProjects(env, { market: 'cyprus' })).slice(0, 1);
 const georgia = (await fetchProjects(env, { market: 'georgia' })).slice(0, 1);
 const featured = [...uae, ...cyprus, ...georgia];
+
+const homeTools = tools.slice(0, 2);
+const homeCourses = courses.slice(0, 2);
+const featuredPost = [...blogPosts].sort(
+  (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
+)[0];
 ---
 <BaseLayout title="Home">
   <!-- Hero -->
@@ -131,6 +141,63 @@ const featured = [...uae, ...cyprus, ...georgia];
       </div>
     </div>
   </section>
+
+  <!-- Tools & courses -->
+  <section class="bg-white py-14">
+    <div class="container-page">
+      <div class="flex items-end justify-between">
+        <h2 class="text-2xl font-semibold text-ink-900 sm:text-3xl">Tools &amp; courses</h2>
+        <a href="/resources?tab=tools" class="text-sm font-medium text-amsi hover:underline">View all &rarr;</a>
+      </div>
+      <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {homeTools.map((t) => (
+          <div class="rounded-2xl border border-sand-200 p-6">
+            <div class="flex items-start justify-between gap-3">
+              <h3 class="font-serif text-lg font-semibold text-ink-900">{t.name}</h3>
+              <LabelPill label="sponsored" />
+            </div>
+            <p class="mt-2 text-sm text-ink-700">{t.blurb}</p>
+            <a href={t.href} class="mt-4 inline-block text-sm font-medium text-amsi hover:underline">Try it &rarr;</a>
+          </div>
+        ))}
+        {homeCourses.map((c) => (
+          <div class="rounded-2xl border border-sand-200 p-6">
+            <div class="flex items-start justify-between gap-3">
+              <h3 class="font-serif text-lg font-semibold text-ink-900">{c.name}</h3>
+              <LabelPill label="sponsored" />
+            </div>
+            <p class="mt-2 text-sm text-ink-700">{c.blurb}</p>
+            <a href={c.href} class="mt-4 inline-block text-sm font-medium text-amsi hover:underline">View course &rarr;</a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- From the blog -->
+  {featuredPost && (
+    <section class="py-14">
+      <div class="container-page">
+        <div class="flex items-end justify-between">
+          <h2 class="text-2xl font-semibold text-ink-900 sm:text-3xl">From the blog</h2>
+          <a href="/blog" class="text-sm font-medium text-amsi hover:underline">Read more &rarr;</a>
+        </div>
+        <a
+          href={`/blog/${featuredPost.slug}`}
+          class="mt-8 flex flex-col gap-3 rounded-2xl border border-sand-200 bg-white p-6 transition hover:shadow-lg sm:p-8"
+        >
+          <p class="text-xs font-medium uppercase tracking-wide text-amsi">
+            {featuredPost.category} &middot; {featuredPost.market === 'global' ? 'Global' : featuredPost.market.toUpperCase()}
+          </p>
+          <h3 class="font-serif text-xl font-semibold text-ink-900 sm:text-2xl">{featuredPost.title}</h3>
+          <p class="max-w-2xl text-sm text-ink-700">{featuredPost.excerpt}</p>
+          <p class="text-xs text-ink-500">
+            {new Date(featuredPost.publishedAt).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </p>
+        </a>
+      </div>
+    </section>
+  )}
 
   <EnquiryFooter />
 </BaseLayout>
