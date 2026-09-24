@@ -29,6 +29,11 @@ const resolvedOgDescription = ogDescription ?? description;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Tells browsers (notably Android Chrome/Samsung Internet's "auto dark
+         theme") this is a light-only site, so they stop algorithmically
+         inverting colors to match the device's dark mode — the site has no
+         dark theme of its own, so that inversion just breaks the design. -->
+    <meta name="color-scheme" content="light" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <meta property="og:type" content="website" />

@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    color-scheme: light;
+  }
+
+
   /* Tailwind's `.grid`/`.flex` utilities have the same specificity as the
      native [hidden] attribute, and author rules beat the UA stylesheet
      regardless — so a hidden panel that also has `grid` on it stays
