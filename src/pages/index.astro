@@ -44,11 +44,11 @@ const featuredPost = [...blogPosts].sort(
   <section class="bg-gradient-to-b from-sand-100 to-sand-50 py-16 sm:py-24">
     <div class="container-page grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
       <div class="flex justify-center lg:justify-start">
-        <div class="rounded-3xl border border-amsi/20 bg-amsi/10 p-6 sm:p-8">
+        <div class="overflow-hidden rounded-3xl border border-amsi/20 bg-amsi/10 py-6 pl-6 sm:py-8 sm:pl-8">
           <img
             src="/images/michael-kisanga.webp"
             alt="Off-plan property across UAE, Cyprus, Oman, Saudi Arabia and Georgia for international buyers"
-            class="w-full max-w-xs sm:max-w-sm"
+            class="max-w-xs sm:max-w-sm"
             loading="eager"
           />
         </div>
@@ -148,14 +148,40 @@ const featuredPost = [...blogPosts].sort(
   <!-- Resources -->
   <section class="py-14">
     <div class="container-page">
-      <div class="mx-auto max-w-md rounded-2xl border border-sand-200 bg-white p-6">
-        <p class="text-sm font-semibold uppercase tracking-wide text-ink-500">Resources</p>
-        <ul class="mt-4 space-y-3 text-sm">
-          <li><a href="/resources?tab=financing" class="font-medium text-ink-900 hover:text-amsi">Financing options &rarr;</a></li>
-          <li><a href="/resources?tab=eguides" class="font-medium text-ink-900 hover:text-amsi">Free & paid e-guides &rarr;</a></li>
-          <li><a href="/resources?tab=tools" class="font-medium text-ink-900 hover:text-amsi">Tools &rarr;</a></li>
-          <li><a href="/resources?tab=courses" class="font-medium text-ink-900 hover:text-amsi">Courses &rarr;</a></li>
-        </ul>
+      <h2 class="text-2xl font-semibold text-ink-900 sm:text-3xl">Resources</h2>
+      <p class="mt-2 max-w-2xl text-ink-700">
+        Everything else Amsi Spaces connects you to beyond property listings — financing, guides,
+        tools and courses for buying from abroad.
+      </p>
+      <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="rounded-2xl border border-sand-200 p-6">
+          <h3 class="font-serif text-lg font-semibold text-ink-900">Financing</h3>
+          <p class="mt-2 text-sm text-ink-700">
+            Referral introductions to vetted financing partners for overseas buyers.
+          </p>
+          <a href="/resources?tab=financing" class="mt-4 inline-block text-sm font-medium text-amsi hover:underline">Financing options &rarr;</a>
+        </div>
+        <div class="rounded-2xl border border-sand-200 p-6">
+          <h3 class="font-serif text-lg font-semibold text-ink-900">E-guides</h3>
+          <p class="mt-2 text-sm text-ink-700">
+            Free and paid guides on payment plans, permits, and buying from abroad.
+          </p>
+          <a href="/resources?tab=eguides" class="mt-4 inline-block text-sm font-medium text-amsi hover:underline">Free &amp; paid e-guides &rarr;</a>
+        </div>
+        <div class="rounded-2xl border border-sand-200 p-6">
+          <h3 class="font-serif text-lg font-semibold text-ink-900">Tools</h3>
+          <p class="mt-2 text-sm text-ink-700">
+            Calculators and widgets to plan a purchase in your own currency.
+          </p>
+          <a href="/resources?tab=tools" class="mt-4 inline-block text-sm font-medium text-amsi hover:underline">Tools &rarr;</a>
+        </div>
+        <div class="rounded-2xl border border-sand-200 p-6">
+          <h3 class="font-serif text-lg font-semibold text-ink-900">Courses</h3>
+          <p class="mt-2 text-sm text-ink-700">
+            Partner-run courses on off-plan investing and payment structures.
+          </p>
+          <a href="/resources?tab=courses" class="mt-4 inline-block text-sm font-medium text-amsi hover:underline">Courses &rarr;</a>
+        </div>
       </div>
     </div>
   </section>
