@@ -7,16 +7,33 @@ import '@/styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  /** Overrides the "{title} · Amsi Spaces" default with an exact <title> string. */
+  fullTitle?: string;
+  /** Defaults to the resolved page title/description when omitted. */
+  ogTitle?: string;
+  ogDescription?: string;
 }
-const { title, description = 'Amsi Spaces — a referral partner for off-plan real estate, financing, tools and courses across UAE, Cyprus, Oman, Saudi Arabia and Georgia.' } = Astro.props;
+const {
+  title,
+  description = 'Amsi Spaces — a referral partner for off-plan real estate, financing, tools and courses across UAE, Cyprus, Oman, Saudi Arabia and Georgia.',
+  fullTitle,
+  ogTitle,
+  ogDescription,
+} = Astro.props;
+const pageTitle = fullTitle ?? `${title} · Amsi Spaces`;
+const resolvedOgTitle = ogTitle ?? pageTitle;
+const resolvedOgDescription = ogDescription ?? description;
 ---
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title} · Amsi Spaces</title>
+    <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={resolvedOgTitle} />
+    <meta property="og:description" content={resolvedOgDescription} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <!-- Cloudflare Turnstile, loaded sitewide since the enquiry footer appears on every page -->
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>

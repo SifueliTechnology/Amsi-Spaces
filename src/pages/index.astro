@@ -33,36 +33,58 @@ const featuredPost = [...blogPosts].sort(
   (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
 )[0];
 ---
-<BaseLayout title="Home">
+<BaseLayout
+  title="Home"
+  fullTitle="Amsi Spaces | Off-Plan Property for Diaspora & Relocators"
+  description="Verified off-plan property, financing & relocation guidance across UAE, Cyprus, Oman, Saudi Arabia & Georgia. Built for diaspora buyers, relocators & nomads."
+  ogTitle="Amsi Spaces — Property & Relocation Guidance for a Global Life"
+  ogDescription="Trusted off-plan property, financing, and honest guidance for diaspora professionals, relocators, and digital nomads across five markets."
+>
   <!-- Hero -->
   <section class="bg-gradient-to-b from-sand-100 to-sand-50 py-16 sm:py-24">
-    <div class="container-page">
-      <p class="text-sm font-medium uppercase tracking-wide text-amsi">
-        UAE &middot; Cyprus &middot; Oman &middot; Saudi Arabia &middot; Georgia
-      </p>
-      <h1 class="mt-3 max-w-2xl text-4xl font-semibold leading-tight text-ink-900 sm:text-5xl">
-        A trusted way in to off-plan property across five markets.
-      </h1>
-      <p class="mt-5 max-w-xl text-lg text-ink-700">
-        Amsi Spaces connects you with vetted partners for property, financing, tools and courses.
-        We're a referral partner, not a broker — we never negotiate on your behalf or touch your money.
-      </p>
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a href="/properties" class="btn-primary">Browse properties</a>
-        <a href="#enquiry" class="btn-secondary">Ask Amsi</a>
-      </div>
+    <div class="container-page grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+      <div>
+        <p class="text-sm font-medium uppercase tracking-wide text-amsi">
+          Off-Plan Property &amp; Relocation Guidance &middot; UAE &middot; Cyprus &middot; Oman &middot; Saudi Arabia &middot; Georgia
+        </p>
+        <h1 class="mt-3 max-w-2xl text-4xl font-semibold leading-tight text-ink-900 sm:text-5xl">
+          <span class="sm:hidden">Your Next Address, 4,000 Miles Away</span>
+          <span class="hidden sm:inline">Your Next Address Could Be 4,000 Miles From Where You're Standing</span>
+        </h1>
+        <p class="mt-5 max-w-xl text-lg text-ink-700">
+          Amsi Spaces helps diaspora professionals, relocators, and digital nomads find verified
+          off-plan property, financing, and honest guidance — across five international markets,
+          from wherever you are today.
+        </p>
+        <p class="mt-3 max-w-xl text-sm text-ink-500">
+          No hype. No guaranteed returns. Just permit-verified listings, real payment plans, and a
+          real person who replies.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="/resources?tab=eguides" class="btn-primary">Get the Free Overseas Buyer's Guide</a>
+          <a href="/properties" class="btn-secondary">Explore Properties</a>
+        </div>
 
-      <!-- Market selector row -->
-      <div class="mt-12 flex flex-wrap gap-3">
-        {markets.map((m) => (
-          <a
-            href={`/properties?market=${m.slug}`}
-            class="rounded-xl border border-sand-200 bg-white px-4 py-3 text-sm transition hover:border-amsi hover:shadow-sm"
-          >
-            <span class="block font-medium text-ink-900">{m.name}</span>
-            <span class="block text-xs text-ink-500">{m.currency}</span>
-          </a>
-        ))}
+        <!-- Market selector row -->
+        <div class="mt-12 flex flex-wrap gap-3">
+          {markets.map((m) => (
+            <a
+              href={`/properties?market=${m.slug}`}
+              class="rounded-xl border border-sand-200 bg-white px-4 py-3 text-sm transition hover:border-amsi hover:shadow-sm"
+            >
+              <span class="block font-medium text-ink-900">{m.name}</span>
+              <span class="block text-xs text-ink-500">{m.currency}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+      <div class="flex justify-center lg:justify-end">
+        <img
+          src="/images/michael-kisanga.webp"
+          alt="Off-plan property across UAE, Cyprus, Oman, Saudi Arabia and Georgia for international buyers"
+          class="w-full max-w-xs sm:max-w-sm"
+          loading="eager"
+        />
       </div>
     </div>
   </section>
@@ -121,23 +143,10 @@ const featuredPost = [...blogPosts].sort(
     </div>
   </section>
 
-  <!-- Meet Amsi -->
+  <!-- Resources -->
   <section class="py-14">
-    <div class="container-page grid gap-10 lg:grid-cols-2 lg:items-center">
-      <div>
-        <h2 class="text-2xl font-semibold text-ink-900 sm:text-3xl">Meet Amsi</h2>
-        <p class="mt-4 text-ink-700">
-          Amsi Spaces is run by Michael Kisanga, connecting people across North America, Africa,
-          Europe and Australia with vetted real estate, financing, tools and course partners in
-          five markets. Amsi is a referral partner — never a licensed broker, agent, lender or
-          financial adviser — and never negotiates on your behalf or handles your money.
-        </p>
-        <p class="mt-4 text-ink-700">
-          Every enquiry is reviewed personally. If you want to move forward with a partner, that
-          introduction is made manually, with your consent, every time.
-        </p>
-      </div>
-      <div class="rounded-2xl border border-sand-200 bg-white p-6">
+    <div class="container-page">
+      <div class="mx-auto max-w-md rounded-2xl border border-sand-200 bg-white p-6">
         <p class="text-sm font-semibold uppercase tracking-wide text-ink-500">Resources</p>
         <ul class="mt-4 space-y-3 text-sm">
           <li><a href="/resources?tab=financing" class="font-medium text-ink-900 hover:text-amsi">Financing options &rarr;</a></li>
