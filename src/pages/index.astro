@@ -42,7 +42,17 @@ const featuredPost = [...blogPosts].sort(
 >
   <!-- Hero -->
   <section class="bg-gradient-to-b from-sand-100 to-sand-50 py-16 sm:py-24">
-    <div class="container-page grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+    <div class="container-page grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+      <div class="flex justify-center lg:justify-start">
+        <div class="rounded-3xl border border-amsi/20 bg-amsi/10 p-6 sm:p-8">
+          <img
+            src="/images/michael-kisanga.webp"
+            alt="Off-plan property across UAE, Cyprus, Oman, Saudi Arabia and Georgia for international buyers"
+            class="w-full max-w-xs sm:max-w-sm"
+            loading="eager"
+          />
+        </div>
+      </div>
       <div>
         <p class="text-sm font-medium uppercase tracking-wide text-amsi">
           Off-Plan Property &amp; Relocation Guidance &middot; UAE &middot; Cyprus &middot; Oman &middot; Saudi Arabia &middot; Georgia
@@ -77,14 +87,6 @@ const featuredPost = [...blogPosts].sort(
             </a>
           ))}
         </div>
-      </div>
-      <div class="flex justify-center lg:justify-end">
-        <img
-          src="/images/michael-kisanga.webp"
-          alt="Off-plan property across UAE, Cyprus, Oman, Saudi Arabia and Georgia for international buyers"
-          class="w-full max-w-xs sm:max-w-sm"
-          loading="eager"
-        />
       </div>
     </div>
   </section>
