@@ -12,8 +12,12 @@ jobs:
     steps:
       - name: Trigger /api/palmera-sync
         run: |
+          # Hits the Pages project's own *.pages.dev address rather than the
+          # custom domain, so it isn't subject to that domain's Cloudflare
+          # security settings (Bot Fight Mode etc.) — it's the same app and
+          # still requires the shared secret below either way.
           status=$(curl -s -o /tmp/response.txt -w '%{http_code}' \
-            -X POST "https://amsispaces.com/api/palmera-sync" \
+            -X POST "https://amsi-spaces.pages.dev/api/palmera-sync" \
             -H "X-Sync-Secret: ${{ secrets.PALMERA_SYNC_SECRET }}")
           echo "HTTP status: $status"
           cat /tmp/response.txt
