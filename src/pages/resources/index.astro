@@ -166,8 +166,14 @@ const activeTab = tabs.some((t) => t.id === requestedTab) ? requestedTab! : 'too
     </div>
   </div>
 
-  <!-- Gumroad overlay embed script — powers the in-page checkout for Amsi's own guides -->
-  <script src="https://gumroad.com/js/gumroad.js"></script>
+  <!-- Gumroad overlay embed script — powers the in-page checkout for Amsi's
+       own paid guides. is:inline keeps this a plain classic script tag;
+       without it, Astro bundles external scripts into the same ES module
+       chain as this page's other hoisted scripts (the guide-capture popup's
+       click handlers), and since gumroad.com's script doesn't send CORS
+       headers, that cross-origin module import fails — silently breaking
+       every other script in the bundle along with it. -->
+  <script is:inline src="https://gumroad.com/js/gumroad.js"></script>
 
   <EnquiryFooter interestChips={['Tools & courses', 'Financing', 'E-guides', 'Something else']} />
 </BaseLayout>
