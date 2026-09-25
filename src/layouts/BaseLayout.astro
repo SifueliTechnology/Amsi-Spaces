@@ -3,6 +3,7 @@ import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import CookieBanner from '@/components/CookieBanner.astro';
 import GuideCaptureModal from '@/components/GuideCaptureModal.astro';
+import GoogleAnalytics from '@/components/GoogleAnalytics.astro';
 import '@/styles/global.css';
 
 interface Props {
@@ -41,8 +42,12 @@ const resolvedOgDescription = ogDescription ?? description;
     <meta property="og:title" content={resolvedOgTitle} />
     <meta property="og:description" content={resolvedOgDescription} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION && (
+      <meta name="google-site-verification" content={import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION} />
+    )}
     <!-- Cloudflare Turnstile, loaded sitewide since the enquiry footer appears on every page -->
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <GoogleAnalytics />
   </head>
   <body>
     <Header />

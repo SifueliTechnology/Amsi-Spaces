@@ -33,11 +33,15 @@
       localStorage.setItem(KEY, JSON.stringify({ essential: true, analytics: true, advertising: true, at: Date.now() }));
     } catch {}
     banner?.classList.add('hidden');
+    // Lets GoogleAnalytics.astro (and anything else gated on consent) start
+    // immediately, without needing a page reload to re-read localStorage.
+    document.dispatchEvent(new CustomEvent('amsi:consent-updated'));
   });
   document.getElementById('cookie-essential-only')?.addEventListener('click', () => {
     try {
       localStorage.setItem(KEY, JSON.stringify({ essential: true, analytics: false, advertising: false, at: Date.now() }));
     } catch {}
     banner?.classList.add('hidden');
+    document.dispatchEvent(new CustomEvent('amsi:consent-updated'));
   });
 </script>

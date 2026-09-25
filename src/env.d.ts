@@ -24,3 +24,10 @@ declare namespace App {
 }
 
 type Runtime = import('@astrojs/cloudflare').Runtime<CloudflareEnv>;
+
+// Public, build-time-inlined vars (baked into the static output by
+// `astro build` — never secrets). Set via a local .env file; see README.
+interface ImportMetaEnv {
+  readonly PUBLIC_GA_MEASUREMENT_ID?: string;
+  readonly PUBLIC_GOOGLE_SITE_VERIFICATION?: string;
+}
