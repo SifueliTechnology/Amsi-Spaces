@@ -42,6 +42,36 @@ export const eguides: EGuide[] = [
     fileUrl: '/guides/relocation-guide.pdf',
   },
   {
+    slug: 'off-plan-explained',
+    title: 'Off-Plan Explained',
+    owner: 'amsi',
+    type: 'free',
+    topic: 'Buying',
+    summary:
+      "A first-timer's guide to buying before it's built — what \"off-plan\" actually means, why developers sell this way, how payment plans work, escrow and buyer protection, realistic risks to understand, and a plain-language glossary. Not tied to any one country or project.",
+    fileUrl: '/guides/off-plan-explained.pdf',
+  },
+  {
+    slug: 'markets-compared',
+    title: 'Markets, Compared',
+    owner: 'amsi',
+    type: 'free',
+    topic: 'Buying',
+    summary:
+      'A side-by-side starting point across UAE, Cyprus, Oman, Saudi Arabia, Georgia and Zanzibar (coming soon) — entry price, typical buyer, and regulatory notes for each, so you can shortlist a market or two before researching properly.',
+    fileUrl: '/guides/markets-compared.pdf',
+  },
+  {
+    slug: 'digital-nomads-guide',
+    title: "The Digital Nomad's Guide",
+    owner: 'amsi',
+    type: 'free',
+    topic: 'Relocation',
+    summary:
+      'Property in Georgia, Cyprus and Zanzibar (coming soon) for remote workers considering a base abroad — why each place attracts long-stay visitors, buying as a base vs. as an investment, and practical logistics for remote work.',
+    fileUrl: '/guides/digital-nomads-guide.pdf',
+  },
+  {
     slug: 'buying-off-plan-uae-2026',
     title: 'Buying Off-Plan in the UAE: A First-Timer\'s Checklist',
     owner: 'amsi',
