@@ -1,5 +1,8 @@
-// E-guides tab seed data. Amsi's own guides (free or paid) go through
-// Gumroad (overlay checkout, gumroadProductId wired up once products exist).
+// E-guides tab seed data. Amsi's own PAID guides go through Gumroad (overlay
+// checkout). Amsi's own FREE guides are gated by an email-capture popup
+// instead (see GuideCaptureModal.astro + src/pages/api/guide-request.ts) —
+// no payment involved, so no Gumroad step: the visitor's name/phone/email is
+// saved as a lead and the guide is emailed to them via a download link.
 // Partner guides link out and are always labelled "Sponsored".
 
 export interface EGuide {
@@ -12,11 +15,22 @@ export interface EGuide {
   market?: string;
   topic: string;
   summary: string;
-  gumroadUrl?: string; // e.g. https://amsi.gumroad.com/l/xxxxx — set once product is live
+  gumroadUrl?: string; // e.g. https://amsi.gumroad.com/l/xxxxx — paid amsi guides only
+  fileUrl?: string; // e.g. /guides/xxx.pdf — free amsi guides delivered via the capture popup
   externalUrl?: string; // partner e-books only
 }
 
 export const eguides: EGuide[] = [
+  {
+    slug: 'relocation-guide',
+    title: 'The Relocation Guide',
+    owner: 'amsi',
+    type: 'free',
+    topic: 'Relocation',
+    summary:
+      'Moving to the UAE, Saudi Arabia, Oman, Cyprus, Spain, Portugal, Georgia or Africa from the UK or US — visas, tax residency, renting vs. buying, cost of living, banking, healthcare, schools, and a move timeline.',
+    fileUrl: '/guides/relocation-guide.pdf',
+  },
   {
     slug: 'buying-off-plan-uae-2026',
     title: 'Buying Off-Plan in the UAE: A First-Timer\'s Checklist',

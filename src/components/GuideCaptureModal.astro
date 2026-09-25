@@ -1,0 +1,129 @@
+---
+// Site-wide popup for free e-guides (owner:'amsi', type:'free', fileUrl set
+// in src/data/eguides.ts — see that file for why free guides don't use the
+// Gumroad flow). Any element on the page with data-guide-request,
+// data-guide-slug and data-guide-title opens this modal instead of
+// navigating; submitting it hits POST /api/guide-request, which saves the
+// lead in D1 and emails the guide's download link to the visitor.
+const CONSENT_VERSION = 'v1-2026-09';
+---
+<div
+  id="guide-modal"
+  class="fixed inset-0 z-50 hidden items-center justify-center bg-ink-900/50 p-4"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Get the free guide"
+>
+  <div class="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+    <button
+      type="button"
+      id="guide-modal-close"
+      class="absolute right-4 top-4 text-ink-500 hover:text-ink-900"
+      aria-label="Close"
+    >
+      &#10005;
+    </button>
+
+    <h2 class="text-xl font-semibold text-ink-900">
+      Get <span id="guide-modal-title">the guide</span>
+    </h2>
+    <p class="mt-2 text-sm text-ink-700">
+      Enter your details and we'll email you the download link right away.
+    </p>
+
+    <form id="guide-modal-form" class="mt-5 flex flex-col gap-3">
+      <label class="flex flex-col gap-1 text-sm text-ink-700">
+        Full name
+        <input required name="name" type="text" class="rounded-lg border border-ink-900/15 px-3 py-2" />
+      </label>
+      <label class="flex flex-col gap-1 text-sm text-ink-700">
+        Phone number
+        <input name="phone" type="tel" placeholder="+971501234567" class="rounded-lg border border-ink-900/15 px-3 py-2" />
+      </label>
+      <label class="flex flex-col gap-1 text-sm text-ink-700">
+        Email
+        <input required name="email" type="email" class="rounded-lg border border-ink-900/15 px-3 py-2" />
+      </label>
+
+      <input type="hidden" name="guideSlug" id="guide-modal-slug" value="" />
+      <input type="hidden" name="guideTitle" id="guide-modal-title-input" value="" />
+      <input type="hidden" name="sourcePage" id="guide-modal-source-page" value="" />
+      <input type="hidden" name="consentTextVersion" value={CONSENT_VERSION} />
+      <input type="text" name="honeypot" class="hidden" tabindex="-1" autocomplete="off" />
+
+      <!-- Turnstile widget — same site key as the main enquiry form. -->
+      <div class="cf-turnstile" data-sitekey="REPLACE_WITH_TURNSTILE_SITE_KEY"></div>
+
+      <p class="text-xs text-ink-500">
+        By submitting, you agree to receive this guide and occasional emails from Amsi Spaces, per
+        the <a href="/privacy" class="underline hover:text-amsi">Privacy Policy</a>. Unsubscribe anytime.
+      </p>
+
+      <button type="submit" class="btn-primary">Send me the guide</button>
+      <p id="guide-modal-status" class="text-sm" role="status"></p>
+    </form>
+  </div>
+</div>
+<script>
+  const modal = document.getElementById('guide-modal');
+  const form = document.getElementById('guide-modal-form') as HTMLFormElement | null;
+  const status = document.getElementById('guide-modal-status');
+  const titleEl = document.getElementById('guide-modal-title');
+  const slugInput = document.getElementById('guide-modal-slug') as HTMLInputElement | null;
+  const titleInput = document.getElementById('guide-modal-title-input') as HTMLInputElement | null;
+  const sourceInput = document.getElementById('guide-modal-source-page') as HTMLInputElement | null;
+
+  function openModal(slug: string, title: string) {
+    form?.reset(); // clears hidden fields too, so set them after this, not before
+    if (slugInput) slugInput.value = slug;
+    if (titleInput) titleInput.value = title;
+    if (sourceInput) sourceInput.value = window.location.pathname;
+    if (titleEl) titleEl.textContent = title;
+    if (status) status.textContent = '';
+    modal?.classList.remove('hidden');
+    modal?.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal?.classList.add('hidden');
+    modal?.classList.remove('flex');
+    document.body.style.overflow = '';
+  }
+
+  // Delegate from document so this also covers triggers rendered later
+  // (e.g. eguide cards swapped in client-side elsewhere on the site).
+  document.addEventListener('click', (e) => {
+    const trigger = (e.target as HTMLElement)?.closest<HTMLElement>('[data-guide-request]');
+    if (trigger) {
+      e.preventDefault();
+      openModal(trigger.dataset.guideSlug ?? '', trigger.dataset.guideTitle ?? 'the guide');
+      return;
+    }
+    if (e.target === modal) closeModal(); // backdrop click
+  });
+
+  document.getElementById('guide-modal-close')?.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal?.classList.contains('hidden')) closeModal();
+  });
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!status) return;
+    status.textContent = 'Sending...';
+    const data = Object.fromEntries(new FormData(form).entries());
+    try {
+      const res = await fetch('/api/guide-request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error('request failed');
+      status.textContent = 'Check your inbox — your guide is on its way.';
+      form.reset();
+    } catch {
+      status.textContent = 'Something went wrong. Please email michael@amsispaces.com directly.';
+    }
+  });
+</script>

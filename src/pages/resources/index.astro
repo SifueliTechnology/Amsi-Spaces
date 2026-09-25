@@ -143,7 +143,17 @@ const activeTab = tabs.some((t) => t.id === requestedTab) ? requestedTab! : 'too
             </div>
             <p class="mt-2 text-xs uppercase tracking-wide text-ink-500">{g.owner === 'amsi' ? 'By Amsi' : 'By partner'} &middot; {g.type === 'free' ? 'Free' : `${g.currency} ${g.price}`}</p>
             <p class="mt-2 text-sm text-ink-700">{g.summary}</p>
-            {g.owner === 'amsi' ? (
+            {g.owner === 'amsi' && g.fileUrl ? (
+              <button
+                type="button"
+                class="btn-primary mt-4"
+                data-guide-request
+                data-guide-slug={g.slug}
+                data-guide-title={g.title}
+              >
+                Get it free
+              </button>
+            ) : g.owner === 'amsi' ? (
               <button class="btn-primary mt-4 gumroad-button" data-gumroad-single-product="true" data-url={g.gumroadUrl}>
                 {g.type === 'free' ? 'Get it free' : 'Buy now'}
               </button>

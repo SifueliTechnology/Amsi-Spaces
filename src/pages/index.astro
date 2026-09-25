@@ -11,6 +11,7 @@ import { fetchProjects } from '@/lib/palmera';
 import { tools } from '@/data/tools';
 import { courses } from '@/data/courses';
 import { blogPosts } from '@/data/blogPosts';
+import { eguides } from '@/data/eguides';
 
 const env = Astro.locals.runtime.env;
 
@@ -26,6 +27,12 @@ try {
 } catch {
   // leave featured empty
 }
+
+// The hero's primary CTA opens the guide-capture popup directly for
+// whichever free guide is meant to be the flagship one — currently
+// 'relocation-guide'. Falls back to null (button becomes inert rather than
+// erroring) if that slug is ever renamed/removed without updating this.
+const heroGuide = eguides.find((g) => g.slug === 'relocation-guide');
 
 const homeTools = tools.slice(0, 2);
 const homeCourses = courses.slice(0, 2);
@@ -71,7 +78,15 @@ const featuredPost = [...blogPosts].sort(
           real person who replies.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
-          <a href="/resources?tab=eguides" class="btn-primary">Get the Free Overseas Buyer's Guide</a>
+          <button
+            type="button"
+            class="btn-primary"
+            data-guide-request
+            data-guide-slug={heroGuide?.slug}
+            data-guide-title={heroGuide?.title}
+          >
+            Get the Free Overseas Buyer's Guide
+          </button>
           <a href="/properties" class="btn-secondary">Explore Properties</a>
         </div>
 
