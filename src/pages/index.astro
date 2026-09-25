@@ -28,11 +28,12 @@ try {
   // leave featured empty
 }
 
-// The hero's primary CTA ("Get the Free Overseas Buyer's Guide") opens the
-// guide-capture popup directly for the guide of that same name. Falls back
-// to null (button becomes inert rather than erroring) if that slug is ever
-// renamed/removed without updating this.
-const heroGuide = eguides.find((g) => g.slug === 'overseas-buyers-guide');
+// The hero's primary CTA opens the guide-capture popup directly for
+// whichever free guide is meant to be the flagship one — currently The
+// Relocation Guide (button copy stays as-is; it doesn't need to name-match
+// the guide). Falls back to null (button becomes inert rather than
+// erroring) if that slug is ever renamed/removed without updating this.
+const heroGuide = eguides.find((g) => g.slug === 'relocation-guide');
 
 const homeTools = tools.slice(0, 2);
 const homeCourses = courses.slice(0, 2);
