@@ -145,11 +145,17 @@ export const POST: APIRoute = async ({ request, locals }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: env.ALERT_EMAIL_FROM,
+          from: `Amsi Spaces <${env.ALERT_EMAIL_FROM}>`,
           to: email,
+          reply_to: env.ALERT_EMAIL_TO,
           subject: `Your guide: ${guide.title}`,
           html: `<p>Hi ${payload.name},</p><p>Thanks for requesting <strong>${guide.title}</strong> — here's your download link:</p><p><a href="${downloadUrl}">${downloadUrl}</a></p><p>Amsi Spaces</p>`,
           text: `Hi ${payload.name},\n\nThanks for requesting ${guide.title} — here's your download link:\n${downloadUrl}\n\nAmsi Spaces`,
+          // Lightweight, real unsubscribe signal (a reply lands with Michael,
+          // who removes them manually) — not full automated suppression yet,
+          // but a valid List-Unsubscribe header still helps Gmail/Outlook
+          // trust the message instead of flagging it as bulk/spam.
+          headers: { 'List-Unsubscribe': `<mailto:${env.ALERT_EMAIL_TO}?subject=unsubscribe>` },
         }),
       });
     } catch {
