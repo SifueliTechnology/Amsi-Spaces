@@ -30,4 +30,6 @@ type Runtime = import('@astrojs/cloudflare').Runtime<CloudflareEnv>;
 interface ImportMetaEnv {
   readonly PUBLIC_GA_MEASUREMENT_ID?: string;
   readonly PUBLIC_GOOGLE_SITE_VERIFICATION?: string;
+  readonly PUBLIC_ADSENSE_CLIENT_ID?: string;
+  readonly PUBLIC_ADSENSE_BLOG_SIDEBAR_SLOT?: string;
 }
