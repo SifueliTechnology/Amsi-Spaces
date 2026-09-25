@@ -121,6 +121,33 @@ wrangler pages secret put N8N_LEAD_WEBHOOK_URL      # optional
 npm run pages:deploy
 ```
 
+### Google Analytics & Search Console
+
+Both are optional, non-secret, and inlined into the static build at
+`astro build` time (not runtime Cloudflare bindings), so they're set via a
+local `.env` file (gitignored) before running `npm run build` /
+`npm run pages:deploy` rather than `wrangler pages secret put`:
+
+```bash
+# .env
+PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX          # analytics.google.com → Admin → Data streams
+PUBLIC_GOOGLE_SITE_VERIFICATION=abc123...       # search.google.com/search-console → Settings →
+                                                 # Ownership verification → HTML tag method, just the
+                                                 # content="..." value, not the full <meta> tag
+```
+
+Leaving either unset omits it entirely — no script tag, no meta tag, no
+request to Google. When `PUBLIC_GA_MEASUREMENT_ID` is set, GA4 still only
+loads once a visitor accepts the "Analytics" category in the cookie banner
+(`src/components/CookieBanner.astro` / `src/components/GoogleAnalytics.astro`);
+it does not track visitors who decline or haven't yet answered the banner.
+
+`/sitemap.xml` and `/robots.txt` are already wired up (the latter is a
+static file at `public/robots.txt`; the former is a live route —
+`src/pages/sitemap.xml.ts` — that includes property detail pages straight
+from the same Palmera KV cache `/properties` reads, so it never goes stale
+against the catalogue).
+
 Then in the Cloudflare dashboard: Pages project → Custom domains → add
 `amsispaces.com` (and `www`), which walks you through pointing the domain's
 nameservers at Cloudflare if it isn't already on Cloudflare DNS.

@@ -1,0 +1,45 @@
+---
+// GA4, loaded only once the visitor has accepted the "Analytics" cookie
+// category in CookieBanner.astro — never unconditionally, so the site
+// keeps the promise that banner already makes. Set PUBLIC_GA_MEASUREMENT_ID
+// (a G-XXXXXXXXXX id from analytics.google.com) in a local .env to enable;
+// omitted entirely (no script, no request to Google) when unset.
+const GA_ID = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+---
+{GA_ID && (
+  <script define:vars={{ GA_ID }}>
+    const CONSENT_KEY = 'amsi-cookie-consent';
+    let loaded = false;
+
+    function hasAnalyticsConsent() {
+      try {
+        const raw = localStorage.getItem(CONSENT_KEY);
+        return raw ? JSON.parse(raw)?.analytics === true : false;
+      } catch {
+        return false;
+      }
+    }
+
+    function loadGtag() {
+      if (loaded) return;
+      loaded = true;
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+      document.head.appendChild(script);
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { window.dataLayer.push(arguments); }
+      window.gtag = gtag;
+      gtag('js', new Date());
+      gtag('config', GA_ID, { anonymize_ip: true });
+    }
+
+    if (hasAnalyticsConsent()) loadGtag();
+    // Fired by CookieBanner.astro right after it writes a new consent
+    // choice — lets analytics start the same session, no reload needed.
+    document.addEventListener('amsi:consent-updated', () => {
+      if (hasAnalyticsConsent()) loadGtag();
+    });
+  </script>
+)}
