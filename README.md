@@ -148,6 +148,28 @@ static file at `public/robots.txt`; the former is a live route —
 from the same Palmera KV cache `/properties` reads, so it never goes stale
 against the catalogue).
 
+### AdSense (Blog only)
+
+Per `advertise.astro`'s existing policy ("We do not run display advertising
+on Properties or Financing pages"), the only AdSense placement is a sticky
+right-rail ad on `/blog` and `/blog/:slug` (`src/components/BlogSidebarAd.astro`),
+gated behind the "Advertising" cookie category exactly like GA is gated
+behind "Analytics" — no ad network request happens until a visitor clicks
+"Accept all". Two more build-time `PUBLIC_` vars, same pattern as GA/Search
+Console:
+
+```bash
+# .env
+PUBLIC_ADSENSE_CLIENT_ID=ca-pub-5667967016852581           # your AdSense publisher ID, "ca-" + the pub-... value
+PUBLIC_ADSENSE_BLOG_SIDEBAR_SLOT=xxxxxxxxxx                  # the ad unit's slot ID — create a Display ad unit
+                                                              # in AdSense (Ads → By ad unit → Display ads) sized
+                                                              # for a sidebar, and use the data-ad-slot value it gives you
+```
+
+`public/ads.txt` is already in place with the `pub-5667967016852581`
+account. Leaving `PUBLIC_ADSENSE_BLOG_SIDEBAR_SLOT` unset omits the ad
+entirely (same "unset = feature off" pattern as everything else here).
+
 Then in the Cloudflare dashboard: Pages project → Custom domains → add
 `amsispaces.com` (and `www`), which walks you through pointing the domain's
 nameservers at Cloudflare if it isn't already on Cloudflare DNS.

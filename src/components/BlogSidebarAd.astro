@@ -1,0 +1,60 @@
+---
+// Sticky right-rail AdSense unit for Blog only (index + article pages).
+// advertise.astro states "We do not run display advertising on Properties
+// or Financing pages" — Blog is the one place display ads are allowed, so
+// this component is only ever imported there, never added to BaseLayout.
+// Loads adsbygoogle.js and requests the ad only once the visitor has
+// accepted the "Advertising" cookie category — same consent-gating
+// pattern as GoogleAnalytics.astro, and consistent with what
+// CookieBanner.astro / privacy.astro already promise.
+const ADSENSE_CLIENT = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID;
+const ADSENSE_SLOT = import.meta.env.PUBLIC_ADSENSE_BLOG_SIDEBAR_SLOT;
+---
+{ADSENSE_CLIENT && ADSENSE_SLOT && (
+  <aside class="hidden lg:block lg:w-[300px] lg:flex-shrink-0">
+    <div class="sticky top-24">
+      <p class="mb-2 text-xs uppercase tracking-wide text-ink-500">Advertisement</p>
+      <ins
+        class="adsbygoogle"
+        style="display:block"
+        data-ad-client={ADSENSE_CLIENT}
+        data-ad-slot={ADSENSE_SLOT}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
+    </div>
+    <script define:vars={{ ADSENSE_CLIENT }}>
+      const CONSENT_KEY = 'amsi-cookie-consent';
+      let loaded = false;
+
+      function hasAdvertisingConsent() {
+        try {
+          const raw = localStorage.getItem(CONSENT_KEY);
+          return raw ? JSON.parse(raw)?.advertising === true : false;
+        } catch {
+          return false;
+        }
+      }
+
+      function loadAdsense() {
+        if (loaded) return;
+        loaded = true;
+        const script = document.createElement('script');
+        script.async = true;
+        script.crossOrigin = 'anonymous';
+        script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`;
+        script.onload = () => {
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+        };
+        document.head.appendChild(script);
+      }
+
+      if (hasAdvertisingConsent()) loadAdsense();
+      // Fired by CookieBanner.astro right after it writes a new consent
+      // choice — lets the ad load the same session, no reload needed.
+      document.addEventListener('amsi:consent-updated', () => {
+        if (hasAdvertisingConsent()) loadAdsense();
+      });
+    </script>
+  </aside>
+)}
