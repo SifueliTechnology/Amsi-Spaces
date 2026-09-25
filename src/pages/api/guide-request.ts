@@ -12,8 +12,9 @@ export const prerender = false;
 
 interface GuideRequestPayload {
   name: string;
-  email: string;
+  email?: string; // omitted when alreadyGivenEmail is set — resolved by phone instead
   phone?: string;
+  alreadyGivenEmail?: string | boolean; // checkbox: "look my email up by phone instead"
   guideSlug: string;
   guideTitle?: string;
   sourcePage: string;
@@ -64,7 +65,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
     return jsonResponse({ ok: true }); // pretend success, drop silently
   }
 
-  if (!payload.name || !payload.email || !payload.guideSlug) {
+  const alreadyGivenEmail = payload.alreadyGivenEmail === true || payload.alreadyGivenEmail === 'true' || payload.alreadyGivenEmail === 'on';
+
+  if (!payload.name || !payload.guideSlug || (!payload.email && !(alreadyGivenEmail && payload.phone))) {
     return jsonResponse({ error: 'Missing required fields' }, 400);
   }
 
@@ -84,6 +87,24 @@ export const POST: APIRoute = async ({ request, locals }) => {
     }
   }
 
+  // "I've already given my email" — look up their most recent lead with
+  // that phone number instead of asking again.
+  let email = payload.email;
+  if (!email && alreadyGivenEmail && payload.phone) {
+    const found = await env.DB.prepare(
+      `SELECT email FROM leads WHERE phone = ? AND email IS NOT NULL ORDER BY created_at DESC LIMIT 1`,
+    )
+      .bind(payload.phone)
+      .first<{ email: string }>();
+    if (!found) {
+      return jsonResponse(
+        { error: "We couldn't find an email on file for that phone number — please enter your email once." },
+        400,
+      );
+    }
+    email = found.email;
+  }
+
   const id = crypto.randomUUID();
   const ipHash = ip ? await hashIp(ip) : null;
 
@@ -99,7 +120,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
         id,
         payload.sourcePage ?? 'unknown',
         payload.name,
-        payload.email,
+        email,
         payload.phone ?? null,
         guide.title,
         payload.consentTextVersion ?? 'unknown',
@@ -125,7 +146,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
         },
         body: JSON.stringify({
           from: env.ALERT_EMAIL_FROM,
-          to: payload.email,
+          to: email,
           subject: `Your guide: ${guide.title}`,
           html: `<p>Hi ${payload.name},</p><p>Thanks for requesting <strong>${guide.title}</strong> — here's your download link:</p><p><a href="${downloadUrl}">${downloadUrl}</a></p><p>Amsi Spaces</p>`,
           text: `Hi ${payload.name},\n\nThanks for requesting ${guide.title} — here's your download link:\n${downloadUrl}\n\nAmsi Spaces`,
@@ -149,7 +170,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
           from: env.ALERT_EMAIL_FROM,
           to: env.ALERT_EMAIL_TO,
           subject: `New guide request: ${guide.title} — ${payload.name}`,
-          text: `${payload.name} <${payload.email}>\nPhone: ${payload.phone ?? 'n/a'}\nGuide: ${guide.title}\nSource: ${payload.sourcePage}`,
+          text: `${payload.name} <${email}>\nPhone: ${payload.phone ?? 'n/a'}\nGuide: ${guide.title}\nSource: ${payload.sourcePage}${alreadyGivenEmail ? '\n(email looked up by phone)' : ''}`,
         }),
       });
     } catch {

@@ -36,13 +36,17 @@ const CONSENT_VERSION = 'v1-2026-09';
         Full name
         <input required name="name" type="text" class="rounded-lg border border-ink-900/15 px-3 py-2" />
       </label>
-      <label class="flex flex-col gap-1 text-sm text-ink-700">
+      <label id="guide-modal-phone-label" class="flex flex-col gap-1 text-sm text-ink-700">
         Phone number
-        <input name="phone" type="tel" placeholder="+971501234567" class="rounded-lg border border-ink-900/15 px-3 py-2" />
+        <input id="guide-modal-phone" name="phone" type="tel" placeholder="+971501234567" class="rounded-lg border border-ink-900/15 px-3 py-2" />
       </label>
-      <label class="flex flex-col gap-1 text-sm text-ink-700">
+      <label id="guide-modal-email-label" class="flex flex-col gap-1 text-sm text-ink-700">
         Email
-        <input required name="email" type="email" class="rounded-lg border border-ink-900/15 px-3 py-2" />
+        <input id="guide-modal-email" required name="email" type="email" class="rounded-lg border border-ink-900/15 px-3 py-2" />
+      </label>
+      <label class="flex items-start gap-2 text-sm text-ink-700">
+        <input id="guide-modal-already-given" type="checkbox" name="alreadyGivenEmail" class="mt-1" />
+        <span>I've already given you my email before — look it up by my phone number instead.</span>
       </label>
 
       <input type="hidden" name="guideSlug" id="guide-modal-slug" value="" />
@@ -72,6 +76,21 @@ const CONSENT_VERSION = 'v1-2026-09';
   const slugInput = document.getElementById('guide-modal-slug') as HTMLInputElement | null;
   const titleInput = document.getElementById('guide-modal-title-input') as HTMLInputElement | null;
   const sourceInput = document.getElementById('guide-modal-source-page') as HTMLInputElement | null;
+  const alreadyGivenCheckbox = document.getElementById('guide-modal-already-given') as HTMLInputElement | null;
+  const emailLabel = document.getElementById('guide-modal-email-label');
+  const emailInput = document.getElementById('guide-modal-email') as HTMLInputElement | null;
+  const phoneInput = document.getElementById('guide-modal-phone') as HTMLInputElement | null;
+
+  // Ticking "already given my email" hides the email field (nothing left to
+  // fill in) and instead requires a phone number, since that's what the
+  // backend looks up their email by (see /api/guide-request.ts).
+  function applyAlreadyGivenState() {
+    const checked = alreadyGivenCheckbox?.checked ?? false;
+    emailLabel?.classList.toggle('hidden', checked);
+    if (emailInput) emailInput.required = !checked;
+    if (phoneInput) phoneInput.required = checked;
+  }
+  alreadyGivenCheckbox?.addEventListener('change', applyAlreadyGivenState);
 
   function openModal(slug: string, title: string) {
     form?.reset(); // clears hidden fields too, so set them after this, not before
@@ -80,6 +99,7 @@ const CONSENT_VERSION = 'v1-2026-09';
     if (sourceInput) sourceInput.value = window.location.pathname;
     if (titleEl) titleEl.textContent = title;
     if (status) status.textContent = '';
+    applyAlreadyGivenState(); // form.reset() unchecks the box, so re-sync required/hidden state
     modal?.classList.remove('hidden');
     modal?.classList.add('flex');
     document.body.style.overflow = 'hidden';
