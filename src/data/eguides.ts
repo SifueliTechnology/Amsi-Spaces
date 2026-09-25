@@ -22,6 +22,16 @@ export interface EGuide {
 
 export const eguides: EGuide[] = [
   {
+    slug: 'overseas-buyers-guide',
+    title: "The Overseas Buyer's Guide",
+    owner: 'amsi',
+    type: 'free',
+    topic: 'Buying',
+    summary:
+      'Buying property from abroad in the UK, US, UAE/Dubai, Spain or Portugal — who can buy, purchase taxes, buying without flying in (power of attorney, your team on the ground), financing and moving money, and the costs and checks to run before you sign.',
+    fileUrl: '/guides/overseas-buyers-guide.pdf',
+  },
+  {
     slug: 'relocation-guide',
     title: 'The Relocation Guide',
     owner: 'amsi',
