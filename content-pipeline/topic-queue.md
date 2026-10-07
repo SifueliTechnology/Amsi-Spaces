@@ -17,11 +17,11 @@ and flip status on topics as they're consumed.
 1. **Is Your Dubai Off-Plan Investment Safe During Regional Tensions? A Realistic Risk Assessment**
    segment: diaspora investors | market: UAE | source: Reddit (r/dubairealestate — "Dubai investor here — off-plan unit handover in 2027 and honestly feeling panic after recent situation", https://www.reddit.com/r/dubairealestate/comments/1rinuni/dubai_investor_here_offplan_unit_handover_in_2027/)
    note: sensitive topic (geopolitical) — write carefully, measured, sourced, no alarmism
-   status: queued
+   status: used (2026-10-07, slug: dubai-off-plan-regional-tensions-risk-assessment, PR pending review)
 
 2. **Moving to Dubai Without a Relocation Package: What Salary Actually Covers the Real Cost of Living**
    segment: relocators | market: UAE | source: Reddit (r/DubaiCentral / r/DubaiJobs — "26F, Got an offer of 15,000 AED to relocate from India to Dubai", https://www.reddit.com/r/DubaiCentral/comments/1o45v7k/26f_got_an_offer_of_15000_aed_to_relocate_from/ ; "Move to Dubai as expat without relocation package?", https://www.reddit.com/r/DubaiJobs/comments/1ks086x/move_to_dubai_as_expat_without_relocation_package/)
-   status: queued
+   status: used (2026-10-07, slug: dubai-relocation-without-package-real-cost-of-living, PR pending review)
 
 3. **Moving to Cyprus: The Honest Pros, Cons, and Regrets Expats Don't Post About on Vacation**
    segment: relocators | market: Cyprus | source: Reddit (r/cyprus — "Tell me the reasons not to move to Cyprus", https://www.reddit.com/r/cyprus/comments/1kbgkwx/tell_me_the_reasons_not_to_move_to_cyprus/ ; "Do you have any regrets moving to Cyprus as an expat?", https://www.reddit.com/r/cyprus/comments/1f3xmqi/do_you_have_any_regrets_moving_to_cyprus_as_an/)
