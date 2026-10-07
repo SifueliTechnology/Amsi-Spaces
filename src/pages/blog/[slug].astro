@@ -35,7 +35,7 @@ const ctaMarketLabel = market ? market.name : 'your market';
     )}
 
     <div class="prose prose-sand mt-8 max-w-none prose-headings:font-serif prose-a:text-amsi">
-      <p>{post.body}</p>
+      {post.bodyHtml ? <Fragment set:html={post.bodyHtml} /> : <p>{post.body}</p>}
     </div>
 
     {post.promotes && (
