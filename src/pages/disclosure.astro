@@ -1,50 +1,115 @@
 ---
 export const prerender = true; // static content only, no Cloudflare bindings needed
 
-// NOTE: the brief references finished drafts (disclosure.md, privacy.md,
-// terms.md) that were not included in the uploaded brief file — only their
-// key confirmed points were. The structure, labelling key and confirmed
-// points below are wired up correctly; replace the placeholder paragraphs
-// with the actual drafted legal text before this page ships, and get the
-// lawyer review the brief calls for (Section 6) regardless.
 import LegalLayout from '@/layouts/LegalLayout.astro';
 import LabelPill from '@/components/LabelPill.astro';
 
 const sections = [
-  { id: 'what-this-is', heading: 'What this page is' },
+  { id: 'what-this-is', heading: 'What Amsi Spaces is, and is not' },
+  { id: 'how-we-earn', heading: 'How we earn money' },
   { id: 'labelling-key', heading: 'Labelling key' },
   { id: 'our-partners', heading: 'Our partners' },
+  { id: 'permits', heading: 'Property projects and permits' },
+  { id: 'financing', heading: 'Financing' },
   { id: 'how-we-choose', heading: 'How we choose partners' },
+  { id: 'prices', heading: 'Prices and currency' },
+  { id: 'third-party', heading: 'Third-party sites' },
   { id: 'not-a-broker', heading: 'What Amsi Spaces is not' },
+  { id: 'contact', heading: 'Questions' },
 ];
 ---
 <LegalLayout
   title="Affiliate & Referral Disclosure"
   lastUpdated="[DATE — pending lawyer review]"
-  inShort="Amsi Spaces earns fees from referral and affiliate partners, always labelled next to the link. We are not a broker, agent, lender or adviser, and never handle your money."
+  inShort="Amsi Spaces is a referral partner, not a real estate broker, agent, lender or financial adviser. Some links on this site are referral links or affiliate links. If you follow one and later complete a purchase, sign-up or loan, the partner involved may pay Amsi Spaces a fee, at no extra cost to you. We label these links every time. Property listings carry no display advertising."
   sections={sections}
 >
-  <h2 id="what-this-is">What this page is</h2>
-  <p>[PLACEHOLDER — insert finalized disclosure.md content here.]</p>
+  <h2 id="what-this-is">What Amsi Spaces is, and is not</h2>
+  <p>
+    Amsi Spaces (amsispaces.com) is operated by <strong>Amsi Spaces</strong> ("Amsi Spaces", "we",
+    "us"). We are a <strong>referral partner</strong>: we introduce readers to property projects,
+    financing options, tools, courses and services offered by other companies. We do not:
+  </p>
+  <ul>
+    <li>act as a real estate broker or agent, or hold any real estate licence, in any jurisdiction;</li>
+    <li>act as a lender, mortgage broker or financial adviser;</li>
+    <li>negotiate price or terms on anyone's behalf;</li>
+    <li>represent a buyer or a seller in any transaction;</li>
+    <li>receive, hold or transmit any buyer's payment, deposit or commission.</li>
+  </ul>
+  <p>Every property, loan, tool or course transaction you enter into happens directly between you and the partner or company involved.</p>
+
+  <h2 id="how-we-earn">How we earn money</h2>
+  <ul>
+    <li><strong>Property referral fees.</strong> For off-plan property projects, Amsi Spaces earns a fee only if a transaction you were referred for actually completes. Our first confirmed property partner is Palmera Elite Real Estate Brokerage L.L.C. (RERA Licence Dubai 40780), and other property partners may be added over time. We never state or imply a specific commission rate or expected payout to any reader.</li>
+    <li><strong>Financing referral fees.</strong> For mortgage, loan and financing partners, we may earn a fee if you complete an application or transaction through a partner we referred you to.</li>
+    <li><strong>Affiliate commissions.</strong> For tools, courses and general services, we may earn a commission if you sign up or buy through a link on this site.</li>
+    <li><strong>Sponsored placements.</strong> Some partners may pay for a featured spot or a sponsored article. These are always labelled.</li>
+    <li><strong>Display advertising.</strong> We may show ads on the Blog and Resources pages. We do not show display ads on property listings or in the enquiry footer.</li>
+  </ul>
 
   <h2 id="labelling-key">Labelling key</h2>
   <p>Two labels appear across this site, and they mean different things:</p>
   <ul>
-    <li><LabelPill label="referral-partner" showTooltip={false} /> — property and financing partners. We're paid only if your enquiry leads to a completed transaction.</li>
-    <li><LabelPill label="sponsored" showTooltip={false} /> — tools, courses, general affiliate links, partner e-books, paid placements and display ads. We may be paid on a click or signup.</li>
+    <li><LabelPill label="referral-partner" showTooltip={false} /> — property and financing partners. We're paid only if your enquiry leads to a completed transaction, not for a click or a sign-up alone.</li>
+    <li><LabelPill label="sponsored" showTooltip={false} /> — tools, courses, general affiliate links, partner e-books, paid placements and display ads. We may be paid on a click or signup, whether or not any property transaction is involved.</li>
   </ul>
-  <p>You may also see <strong>Advertisement</strong> (a paid placement with no editorial input from us) and <strong>Amsi's pick</strong> (our own genuine recommendation, which may still carry a referral or affiliate link).</p>
+  <p>
+    You will also see a disclosure near the top of the Resources and Properties pages, a
+    disclosure at the top of any blog article that contains referral or affiliate links, close to
+    the links it covers, and <strong>Advertisement</strong> on any display ad. <strong>Amsi's
+    pick</strong>, where shown, is our own genuine recommendation, which may still carry a referral
+    or affiliate link.
+  </p>
 
   <h2 id="our-partners">Our partners</h2>
   <p>
-    Our first confirmed partner is <strong>Palmera Elite Real Estate Brokerage L.L.C.</strong>
-    (RERA Licence Dubai 40780, Trade Licence 1306924), covering UAE, Oman, Georgia and Cyprus.
-    We're paid 30% of Palmera's net commission, only on completed off-plan purchases from a
-    developer Palmera markets — never on resale or private-seller deals.
+    Our first confirmed property partner is <strong>Palmera Elite Real Estate Brokerage L.L.C.</strong>
+    (RERA Licence Dubai 40780), covering the UAE, Cyprus, Oman, Saudi Arabia and Georgia. Other
+    property, financing, tools and course partners may be added over time; where a partner isn't
+    yet confirmed for a given market, we say so rather than imply coverage we don't have.
+  </p>
+
+  <h2 id="permits">Property projects and permits</h2>
+  <p>
+    Where a property project's listing shows a government advertising permit number, that
+    information comes directly from our property partner and, where available, links to the
+    relevant land authority's own verification page. Where no permit is shown, none is required
+    for that market or emirate under local advertising rules. We do not publish rental yield,
+    capital appreciation, resale value, income, or visa or residency outcome figures for any
+    property project, whether promised, projected or implied.
+  </p>
+
+  <h2 id="financing">Financing</h2>
+  <p>
+    Amsi Spaces is <strong>not a lender, mortgage broker or financial adviser.</strong> Links to
+    financing partners are referral or affiliate links. Rates, fees, terms and approval decisions
+    are entirely the financing partner's, and can change. Comparing offers does not guarantee
+    approval. Read the partner's own disclosures before you apply. We do not receive or process
+    your loan application; we only introduce you to the partner.
   </p>
 
   <h2 id="how-we-choose">How we choose partners</h2>
-  <p>We choose partners based on reliability, trustworthiness, and prior business experience together.</p>
+  <p>
+    We choose partners, tools, courses and services based on how reliable and trustworthy they
+    are, and, where relevant, on our own past experience working with them. "Amsi's pick," where
+    shown, means the option we currently think best suits a given reader, and we may earn a fee if
+    you choose it. We do not accept payment to change our conclusions or recommendations.
+  </p>
+
+  <h2 id="prices">Prices and currency</h2>
+  <p>
+    Property prices are shown in each market's own currency (AED, EUR, OMR, SAR, or USD) and are
+    supplied by the property partner. They are not converted or estimated by us, and they change
+    with the market. Confirm the current price, currency and terms directly with the partner
+    before you commit.
+  </p>
+
+  <h2 id="third-party">Third-party sites</h2>
+  <p>
+    When you click a partner or referral link, you leave our site. We do not control third-party
+    sites, and their own terms and privacy policies apply once you are there.
+  </p>
 
   <h2 id="not-a-broker">What Amsi Spaces is not</h2>
   <p>
@@ -52,4 +117,7 @@ const sections = [
     jurisdiction. We never negotiate on your behalf, never represent you in a transaction, and
     never touch your funds.
   </p>
+
+  <h2 id="contact">Questions</h2>
+  <p>Email <a href="mailto:michael@amsispaces.com">michael@amsispaces.com</a>.</p>
 </LegalLayout>
