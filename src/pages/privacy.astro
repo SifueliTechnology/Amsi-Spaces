@@ -4,45 +4,113 @@ export const prerender = true; // static content only, no Cloudflare bindings ne
 import LegalLayout from '@/layouts/LegalLayout.astro';
 
 const sections = [
+  { id: 'who-we-are', heading: 'Who we are' },
   { id: 'what-we-collect', heading: 'What we collect' },
   { id: 'how-we-use-it', heading: 'How we use it' },
-  { id: 'retention', heading: 'Data retention' },
+  { id: 'enquiries-handling', heading: 'How enquiries are handled' },
+  { id: 'marketing', heading: 'Marketing messages' },
   { id: 'sharing', heading: 'Sharing with partners' },
-  { id: 'cookies', heading: 'Cookies' },
+  { id: 'transfers', heading: 'Transfers abroad' },
+  { id: 'retention', heading: 'Data retention' },
   { id: 'your-rights', heading: 'Your rights' },
+  { id: 'cookies', heading: 'Cookies' },
+  { id: 'security', heading: 'Security' },
+  { id: 'children', heading: 'Children' },
   { id: 'contact', heading: 'Contact' },
 ];
 ---
 <LegalLayout
   title="Privacy Policy"
   lastUpdated="[DATE — pending lawyer review]"
-  inShort="We collect only what you give us through the enquiry form, keep it for a limited time, and share it with a partner only when you ask us to register your interest with them."
+  inShort="We collect only what we need to answer your enquiry, connect you with the right referral partner, and run the site. We do not sell your personal data. You can ask us to see, correct or delete it at any time."
   sections={sections}
 >
+  <h2 id="who-we-are">Who we are</h2>
+  <p>
+    Amsi Spaces (amsispaces.com) is operated by <strong>Amsi Spaces</strong>, a referral partner
+    for property, financing, tools and courses, working remotely from Tanzania. Amsi Spaces is not
+    a licensed real estate broker, agent, lender or financial adviser. For privacy questions,
+    email <a href="mailto:michael@amsispaces.com">michael@amsispaces.com</a>.
+  </p>
+
   <h2 id="what-we-collect">What we collect</h2>
-  <p>[PLACEHOLDER — insert finalized privacy.md content here.] In general: name, email, optional phone number, contact preference, and whatever you write in the enquiry message. We also log basic technical data (IP, user agent) for spam and abuse prevention.</p>
+  <p><strong>What you give us:</strong> through the enquiry footer — your name, email, phone (optional), contact preference, your message, the interest you chose (for example buying, financing, or a specific project), and any context you add. For property alerts and the newsletter — your email address (or WhatsApp number if you choose it) and your preferences. For direct messages — anything you send us by email or WhatsApp. Please don't send ID numbers, bank details or passwords through the form.</p>
+  <p><strong>What we collect automatically:</strong> technical data such as IP address, browser, device, pages viewed, the page you came from, and campaign tags in the link (UTM); referral and affiliate click data — which partner link you clicked (property project, financing partner, tool, or course), on which page, and when, used to see which recommendations are useful and, where relevant, to register a referral with the partner; and cookies and similar technologies (see below).</p>
 
   <h2 id="how-we-use-it">How we use it</h2>
-  <p>To reply to your enquiry personally, and — only if you choose to proceed — to register your interest manually with the relevant partner (e.g. Palmera). We do not sell your data.</p>
+  <table>
+    <thead><tr><th>Purpose</th><th>Basis</th></tr></thead>
+    <tbody>
+      <tr><td>Reply to your enquiry, personally, and point you to the right partner</td><td>Your request, or our legitimate interest in answering you</td></tr>
+      <tr><td>Register you as a referral with a property or financing partner, when you ask us to</td><td>Your consent</td></tr>
+      <tr><td>Send property alerts, newsletters and similar updates</td><td>Your consent</td></tr>
+      <tr><td>Keep the site secure and stop spam</td><td>Our legitimate interest</td></tr>
+      <tr><td>Understand how the site is used and which referral links work</td><td>Our legitimate interest, or your consent depending on where you live</td></tr>
+      <tr><td>Meet legal obligations</td><td>Legal obligation</td></tr>
+    </tbody>
+  </table>
 
-  <h2 id="retention">Data retention</h2>
+  <h2 id="enquiries-handling">How enquiries are handled</h2>
   <p>
-    [PLACEHOLDER — brief suggests defaults of 12 months for enquiry records and 90 days for raw
-    click/analytics logs, pending lawyer confirmation.]
+    When you contact us through the enquiry footer, <strong>Amsi personally reviews it and
+    replies</strong>, and only registers you with a property or financing partner (for example,
+    Palmera Elite Real Estate Brokerage L.L.C.) if you choose to proceed with a specific project or
+    partner. For Palmera specifically, that registration is sent through Palmera's own partner
+    system once you've asked us to proceed — we use your data only to make that introduction, and
+    do not pass it to a partner without your knowledge.
+  </p>
+
+  <h2 id="marketing">Marketing messages</h2>
+  <p>
+    Updates about similar projects or newsletters are sent only if you tick the separate, optional
+    box or subscribe. Withdraw consent at any time using the unsubscribe link or by emailing us. We
+    use WhatsApp or SMS only if you gave that number and agreed to be contacted that way.
   </p>
 
   <h2 id="sharing">Sharing with partners</h2>
+  <p>We do not sell your personal data. We share it only with:</p>
+  <ul>
+    <li><strong>Service providers</strong> that help us run the site, such as our hosting provider and email delivery and analytics providers. They may only use it to provide their service to us.</li>
+    <li><strong>A specific property or financing partner,</strong> but only when you ask us to introduce you or choose to compare an offer, and only the details needed to make that introduction.</li>
+    <li><strong>Professional advisers and authorities,</strong> where the law requires it.</li>
+  </ul>
+  <p>If you click a link to a partner's own site (for example, a Palmera project page), you leave our site. The partner may place its own cookies and its own privacy policy applies to anything you share with it directly.</p>
+
+  <h2 id="transfers">Transfers abroad</h2>
   <p>
-    We only share your details with a partner (such as Palmera) when you explicitly ask to move
-    forward, and we register that lead manually — there is currently no automated lead-submission
-    integration with Palmera.
+    Our providers, and our referral partners, may process data in other countries, including the
+    United Arab Emirates, Cyprus, Oman, Saudi Arabia and Georgia. Where the law requires it, we use
+    appropriate safeguards.
+  </p>
+
+  <h2 id="retention">Data retention</h2>
+  <ul>
+    <li>Enquiries not referred to a partner: 12 months after our last contact.</li>
+    <li>Enquiries referred to a partner: only as long as needed to make the introduction, then deleted or minimised, unless we must keep a record for legal reasons.</li>
+    <li>Marketing lists: until you unsubscribe.</li>
+    <li>Server logs and security data: 90 days.</li>
+    <li>Referral and affiliate click records: 12 months, in aggregated form where possible.</li>
+  </ul>
+  <p class="text-sm text-ink-500">These periods are our working defaults, not yet confirmed by a lawyer for Tanzanian or partner-market law.</p>
+
+  <h2 id="your-rights">Your rights</h2>
+  <p>
+    Depending on where you live, you may have the right to ask us to give you a copy of your data,
+    correct it, delete it, restrict or object to some uses, move it to another provider, and
+    withdraw your consent. Email <a href="mailto:michael@amsispaces.com">michael@amsispaces.com</a>
+    and we will reply within 30 days. You may also complain to your local data protection
+    authority. [PLACEHOLDER — confirm applicable rights under Tanzania's Personal Data Protection
+    Act, 2022 and, where relevant, UAE PDPL, once reviewed by counsel.]
   </p>
 
   <h2 id="cookies">Cookies</h2>
-  <p>We use Essential cookies to run the site, and — only with your consent — Analytics and Advertising cookies. You can change your choice at any time via the cookie banner.</p>
+  <p>We use Essential cookies to run the site (for example, a bot check on the enquiry form), and — only with your consent via the cookie banner — Analytics cookies. We don't run Advertising cookies today; if that changes, this page and the cookie banner will be updated first. You can change your choice at any time via the cookie banner or your browser settings.</p>
 
-  <h2 id="your-rights">Your rights</h2>
-  <p>[PLACEHOLDER — insert applicable rights under Tanzania's Personal Data Protection Act, 2022 and, where relevant, UAE PDPL, once confirmed by counsel.]</p>
+  <h2 id="security">Security</h2>
+  <p>We use reasonable technical and organisational measures to protect your data. No online service is completely secure, so we cannot guarantee absolute security.</p>
+
+  <h2 id="children">Children</h2>
+  <p>This site is not for anyone under 18, and we do not knowingly collect their data.</p>
 
   <h2 id="contact">Contact</h2>
   <p>Questions about this policy: <a href="mailto:michael@amsispaces.com">michael@amsispaces.com</a>.</p>

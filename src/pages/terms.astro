@@ -5,10 +5,16 @@ import LegalLayout from '@/layouts/LegalLayout.astro';
 
 const sections = [
   { id: 'about-amsi', heading: 'About Amsi Spaces' },
+  { id: 'information-only', heading: 'Information only, not advice' },
+  { id: 'referrals', heading: 'Our role as a referral partner' },
   { id: 'no-license-claims', heading: 'No licence claims' },
+  { id: 'property-listings', heading: 'Property listings' },
   { id: 'no-yield-figures', heading: 'No yield or return figures' },
-  { id: 'referrals', heading: 'How referrals work' },
+  { id: 'using-the-site', heading: 'Using the site' },
+  { id: 'ip', heading: 'Intellectual property' },
+  { id: 'liability', heading: 'No warranties & limit of liability' },
   { id: 'governing-law', heading: 'Governing law' },
+  { id: 'changes', heading: 'Changes' },
   { id: 'contact', heading: 'Contact' },
 ];
 ---
@@ -19,28 +25,78 @@ const sections = [
   sections={sections}
 >
   <h2 id="about-amsi">About Amsi Spaces</h2>
-  <p>[PLACEHOLDER — insert finalized terms.md content here.] Amsi Spaces (legal name: Amsi Spaces) is operated by Michael Kisanga. Contact: michael@amsispaces.com.</p>
+  <p>
+    By using amsispaces.com (the "site") you agree to these terms. If you do not agree, please do
+    not use the site. The site is operated by <strong>Amsi Spaces</strong> ("Amsi Spaces", "we",
+    "us"), a <strong>referral partner</strong> for property, financing, tools and courses across
+    the United Arab Emirates, Cyprus, Oman, Saudi Arabia and Georgia. Contact:
+    <a href="mailto:michael@amsispaces.com">michael@amsispaces.com</a>.
+  </p>
+
+  <h2 id="information-only">Information only, not advice</h2>
+  <p>
+    Everything on the site, including property listings, market updates, guides, calculators and
+    comparisons, is general information. It is <strong>not legal, tax, financial or investment
+    advice.</strong> Speak to a qualified professional before making decisions. Property values can
+    fall as well as rise, and rates, terms and approval decisions for financing are set entirely by
+    the financing partner.
+  </p>
+
+  <h2 id="referrals">Our role as a referral partner</h2>
+  <ul>
+    <li>Amsi Spaces introduces readers to property projects, financing options, tools, courses and services offered by other companies ("partners"). We do not negotiate price or terms, do not represent a buyer or a seller, and do not act on behalf of any partner in any capacity.</li>
+    <li>We never receive, hold or transmit any payment, deposit or commission belonging to you or a partner. Any payment for a property, loan, tool or course is made directly between you and the partner.</li>
+    <li>Where a referral results in a completed transaction, the partner involved may pay Amsi Spaces a fee. See our <a href="/disclosure">Affiliate and Referral Partner Disclosure</a> for details.</li>
+    <li>Sending an enquiry through this site does not create any agency, broker, lender or advisory relationship between you and Amsi Spaces, and does not make you a client of Amsi Spaces or of any partner.</li>
+  </ul>
 
   <h2 id="no-license-claims">No licence claims</h2>
   <p>Amsi Spaces makes no claim to be a licensed real estate broker, agent, lender or financial adviser in any jurisdiction.</p>
 
-  <h2 id="no-yield-figures">No yield or return figures</h2>
-  <p>We never publish yield, return, income or visa-outcome projections for any project or partner, on this site or in any advertising.</p>
+  <h2 id="property-listings">Property listings</h2>
+  <ul>
+    <li>Property listings are supplied by our property partners, and details, prices and availability can change or be out of date. Verify everything, including price, payment plan, title, size, fees and condition, directly with the partner before you commit.</li>
+    <li>Prices are shown in each market's own currency, as supplied by the partner, and are not converted or estimated by us.</li>
+    <li>A listing is an invitation to enquire, not an offer, and not a guarantee of availability.</li>
+    <li>Where a government advertising permit number is shown, it is supplied by the property partner. Where none is shown, none is required for that project under local rules.</li>
+  </ul>
 
-  <h2 id="referrals">How referrals work</h2>
+  <h2 id="no-yield-figures">No yield or return figures</h2>
   <p>
-    Where a page or listing is labelled "Referral partner," we earn a fee only if your enquiry
-    leads to a completed transaction with that partner. Where labelled "Sponsored," we may earn a
-    fee on a click or signup. We never negotiate on your behalf and never handle your funds.
+    We never publish yield, return, income or visa-outcome projections for any project or partner,
+    on this site or in any advertising. Guides and market updates use third-party sources and
+    reflect conditions on the date shown; forecasts and opinions are not guarantees, and figures may
+    be revised.
+  </p>
+
+  <h2 id="using-the-site">Using the site</h2>
+  <p>You agree not to: use the site unlawfully or to send misleading, abusive or spam enquiries; copy, scrape or resell site content or property listings without our written permission; interfere with the site's security or operation; or pretend to be another person, or a representative of Amsi Spaces, a partner, or any partner's brand. You keep ownership of anything you send us; you give us permission to use it to respond to you and to make an introduction to a partner where you ask us to.</p>
+
+  <h2 id="ip">Intellectual property</h2>
+  <p>The site's design, text, guides and code belong to us or our licensors. Property images, project names, logos and materials belonging to our partners remain their property, and we use them only as permitted by our agreements with them. You may view and share pages for personal, non-commercial use, but you may not reproduce or reuse our content otherwise without written permission.</p>
+
+  <h2 id="liability">No warranties & limit of liability</h2>
+  <p>
+    The site is provided "as is" and "as available." To the fullest extent the law allows, we make
+    no promise that it will be error-free or uninterrupted, or that listings, prices or content are
+    complete or current, since much of it is supplied by third-party partners. To the fullest
+    extent the law allows, we are not liable for indirect or consequential loss, or for loss arising
+    from your reliance on the site, a partner's listing or offer, or decisions you make about
+    property or financing. Nothing in these terms limits liability that cannot legally be limited,
+    such as liability for fraud or death or personal injury caused by negligence. [PLACEHOLDER —
+    lawyer to confirm exact wording for Tanzanian and relevant partner-market law.]
   </p>
 
   <h2 id="governing-law">Governing law</h2>
   <p>
-    [PLACEHOLDER — clause 14: these Terms are governed by the laws of the United Republic of
-    Tanzania. Whether jurisdiction is exclusive or non-exclusive is still flagged for a lawyer's
-    final decision — do not remove this note until that's resolved.] This is separate from the
-    Palmera partnership itself, which is governed by UAE/Dubai courts under its own agreement.
+    These terms are governed by the laws of the United Republic of Tanzania, and the courts of
+    Tanzania have [exclusive / non-exclusive — pending lawyer confirmation] jurisdiction, except
+    where consumer law gives you the right to bring a claim where you live. This is separate from
+    the Palmera partnership itself, which is governed by its own agreement.
   </p>
+
+  <h2 id="changes">Changes</h2>
+  <p>We may update these terms. Continuing to use the site after an update means you accept the new version.</p>
 
   <h2 id="contact">Contact</h2>
   <p>Questions about these Terms: <a href="mailto:michael@amsispaces.com">michael@amsispaces.com</a>.</p>
