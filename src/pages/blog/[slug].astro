@@ -22,6 +22,15 @@ const ctaMarketLabel = market ? market.name : 'your market';
     <h1 class="mt-2 text-3xl font-semibold text-ink-900 sm:text-4xl">{post.title}</h1>
     <p class="mt-2 text-sm text-ink-500">{new Date(post.publishedAt).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
 
+    {post.heroImage && (
+      <img
+        src={post.heroImage.src}
+        alt={post.heroImage.alt}
+        class="mt-6 w-full rounded-2xl border border-sand-200 object-cover"
+        loading="eager"
+      />
+    )}
+
     {(post.promotes) && (
       <div class="mt-6"><DisclosureBanner compact /></div>
     )}

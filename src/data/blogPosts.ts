@@ -8,6 +8,15 @@ export interface BlogPost {
   stat?: { label: string; value: string };
   promotes?: { kind: 'property' | 'sponsored'; label: string; href: string };
   body: string;
+  /** Optional pre-rendered HTML body (headings, lists, paragraphs) for
+   * fully structured long-form posts. When present, [slug].astro renders
+   * this instead of wrapping `body` in a single <p>. `body` is still used
+   * as a plain-text fallback/excerpt source, so always keep it populated. */
+  bodyHtml?: string;
+  /** Optional hero image for the post header, produced by the Claude
+   * Design + Higgsfield content-pipeline step (Stage 4). Path relative to
+   * /public (e.g. '/blog/dubai-off-plan-risk-hero.jpg') or a full URL. */
+  heroImage?: { src: string; alt: string };
 }
 
 export const blogPosts: BlogPost[] = [
